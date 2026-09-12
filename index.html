@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Workout Tracker & Routine Scheduler</title>
+  <title>Workout Command</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -16,6 +16,7 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --input-bg: #0f172a;
+      --badge-bg: #1e3a5f;
     }
 
     * {
@@ -128,7 +129,6 @@
       flex: 1;
     }
 
-    /* Routine Bar */
     .schedule-bar {
       background: rgba(56, 189, 248, 0.08);
       border: 1px solid var(--primary);
@@ -150,28 +150,53 @@
       color: var(--primary);
     }
 
-    /* Last performance recall box */
+    /* Enhanced Last Performance Box */
     .last-performance {
-      background: rgba(56, 189, 248, 0.06);
-      border-left: 4px solid var(--primary);
-      padding: 12px 14px;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.88rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--primary);
+      border-left: 5px solid var(--primary);
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
     }
 
-    .last-performance h4 {
+    .last-performance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .last-performance-header h4 {
       color: var(--primary);
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+      font-weight: 700;
     }
 
     .last-perf-details {
       color: var(--text);
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
-    /* Sets Table */
+    .last-perf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .last-perf-chip {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.82rem;
+    }
+
     .sets-container {
       display: flex;
       flex-direction: column;
@@ -182,7 +207,7 @@
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 10px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -195,6 +220,15 @@
       font-weight: 600;
       font-size: 0.85rem;
       color: var(--text-muted);
+    }
+
+    .prev-lift-badge {
+      font-size: 0.78rem;
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: normal;
     }
 
     .set-inputs {
@@ -229,7 +263,6 @@
 
     .btn-sm { padding: 5px 10px; font-size: 0.8rem; border-radius: 6px; }
 
-    /* Schedule Config Layout */
     .day-block {
       border: 1px solid var(--card-border);
       border-radius: 8px;
@@ -267,7 +300,6 @@
       font-weight: bold;
     }
 
-    /* History List */
     .history-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -350,6 +382,7 @@
             placeholder="Type or pick scheduled..." 
             list="exercise-datalist"
             oninput="checkPreviousHistory()"
+            onchange="checkPreviousHistory()"
           />
           <datalist id="exercise-datalist"></datalist>
         </div>
@@ -363,20 +396,26 @@
         <button type="button" class="btn btn-secondary btn-sm" onclick="selectFromDailyRoutine()">Pick Exercise</button>
       </div>
 
-      <!-- Last performance preview -->
+      <!-- Last performance preview Banner -->
       <div id="last-perf-box" class="last-performance" style="display: none;">
-        <h4>Last Logged Performance</h4>
+        <div class="last-performance-header">
+          <h4 id="last-perf-title">Last Logged Performance</h4>
+          <button type="button" class="btn btn-primary btn-sm" onclick="copyPreviousLifts()">Copy Last Weights & Reps</button>
+        </div>
         <div id="last-perf-content" class="last-perf-details"></div>
       </div>
 
       <!-- Sets section -->
       <div>
-        <label>Sets, Pounds & Reps</label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="margin-bottom: 0;">Sets, Pounds & Reps (Defaults to 4 Sets)</label>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="resetToFourSets()">Reset 4 Sets</button>
+        </div>
         <div id="sets-wrapper" class="sets-container"></div>
         <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 10px;" onclick="addSetRow()">+ Add Set</button>
       </div>
 
-      <button type="button" class="btn btn-accent" style="margin-top: 6px;" onclick="saveExerciseSession()">Save Set To Log</button>
+      <button type="button" class="btn btn-accent" style="margin-top: 6px;" onclick="saveExerciseSession()">Save Exercise To Log</button>
     </div>
 
     <!-- VIEW 2: ROUTINES & EXERCISE LIBRARY -->
@@ -423,7 +462,6 @@
           </div>
         </div>
 
-        <!-- Render Days -->
         <div id="days-schedule-container"></div>
       </div>
     </div>
@@ -450,7 +488,6 @@
 
     const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    // Default Seed Data
     const DEFAULT_LIBRARY = [
       "Barbell Bench Press",
       "Incline Dumbbell Bench Press",
@@ -473,18 +510,27 @@
       "Sunday": []
     };
 
-    // State
     let workoutData = JSON.parse(localStorage.getItem(STORAGE_KEY_WORKOUTS)) || [];
     let exerciseLibrary = JSON.parse(localStorage.getItem(STORAGE_KEY_LIBRARY)) || DEFAULT_LIBRARY;
     let weeklySchedule = JSON.parse(localStorage.getItem(STORAGE_KEY_SCHEDULE)) || DEFAULT_SCHEDULE;
+    let currentLastRecordedSession = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('workout-date').value = new Date().toISOString().split('T')[0];
       syncLibraryUI();
       renderWeeklySchedule();
       updateScheduledDay();
-      addSetRow();
+      resetToFourSets();
     });
+
+    function resetToFourSets() {
+      const wrapper = document.getElementById('sets-wrapper');
+      wrapper.innerHTML = '';
+      for (let i = 0; i < 4; i++) {
+        addSetRow();
+      }
+      applyHistoricalBadges();
+    }
 
     function switchTab(tab) {
       const views = {
@@ -511,10 +557,8 @@
        EXERCISE LIBRARY & SCHEDULE
     ------------------------------ */
     function syncLibraryUI() {
-      // Save
       localStorage.setItem(STORAGE_KEY_LIBRARY, JSON.stringify(exerciseLibrary));
 
-      // Datalist in Tracker
       const datalist = document.getElementById('exercise-datalist');
       datalist.innerHTML = '';
       const allKnown = [...new Set([...exerciseLibrary, ...workoutData.map(e => e.exercise.trim())])].sort();
@@ -524,7 +568,6 @@
         datalist.appendChild(opt);
       });
 
-      // Dropdown in Scheduler
       const select = document.getElementById('schedule-exercise-select');
       select.innerHTML = '';
       exerciseLibrary.sort().forEach(name => {
@@ -534,7 +577,6 @@
         select.appendChild(opt);
       });
 
-      // Chips in Library View
       const chipContainer = document.getElementById('library-chip-container');
       chipContainer.innerHTML = '';
       exerciseLibrary.forEach(name => {
@@ -559,7 +601,6 @@
     function removeLibraryExercise(name) {
       if (confirm(`Remove "${name}" from master library?`)) {
         exerciseLibrary = exerciseLibrary.filter(e => e !== name);
-        // Clean from schedules
         Object.keys(weeklySchedule).forEach(day => {
           weeklySchedule[day] = weeklySchedule[day].filter(e => e !== name);
         });
@@ -677,9 +718,12 @@
       const input = document.getElementById('exercise-name').value.trim().toLowerCase();
       const perfBox = document.getElementById('last-perf-box');
       const perfContent = document.getElementById('last-perf-content');
+      const perfTitle = document.getElementById('last-perf-title');
 
       if (!input) {
         perfBox.style.display = 'none';
+        currentLastRecordedSession = null;
+        applyHistoricalBadges();
         return;
       }
 
@@ -688,21 +732,59 @@
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       if (matches.length > 0) {
-        const last = matches[0];
-        let setSummary = last.sets.map((s, idx) => {
-          let str = `Set ${idx + 1}: ${s.weight ? s.weight + ' lbs' : 'Bodyweight'} × ${s.reps} reps`;
-          if (s.comment) str += ` <span style="color: var(--text-muted);">("${s.comment}")</span>`;
-          return str;
-        }).join('<br>');
+        currentLastRecordedSession = matches[0];
+        perfTitle.textContent = `Last Done: ${currentLastRecordedSession.date}`;
+        
+        let gridHtml = `<div class="last-perf-grid">`;
+        currentLastRecordedSession.sets.forEach((s, idx) => {
+          gridHtml += `
+            <div class="last-perf-chip">
+              <strong>Set ${idx + 1}:</strong> ${s.weight ? s.weight + ' lbs' : '0 lbs'} × ${s.reps} reps
+              ${s.comment ? `<div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">"${s.comment}"</div>` : ''}
+            </div>
+          `;
+        });
+        gridHtml += `</div>`;
 
-        perfContent.innerHTML = `
-          <strong>Date:</strong> ${last.date}<br>
-          ${setSummary}
-        `;
+        perfContent.innerHTML = gridHtml;
         perfBox.style.display = 'block';
       } else {
+        currentLastRecordedSession = null;
         perfBox.style.display = 'none';
       }
+      applyHistoricalBadges();
+    }
+
+    function applyHistoricalBadges() {
+      const rows = document.querySelectorAll('#sets-wrapper .set-row');
+      rows.forEach((row, idx) => {
+        let badge = row.querySelector('.prev-lift-badge');
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'prev-lift-badge';
+          row.querySelector('.set-header').appendChild(badge);
+        }
+
+        if (currentLastRecordedSession && currentLastRecordedSession.sets[idx]) {
+          const past = currentLastRecordedSession.sets[idx];
+          badge.textContent = `Last: ${past.weight} lbs × ${past.reps} reps`;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+      });
+    }
+
+    function copyPreviousLifts() {
+      if (!currentLastRecordedSession) return;
+      const rows = document.querySelectorAll('#sets-wrapper .set-row');
+      
+      currentLastRecordedSession.sets.forEach((pastSet, idx) => {
+        if (rows[idx]) {
+          rows[idx].querySelector('.set-weight').value = pastSet.weight;
+          rows[idx].querySelector('.set-reps').value = pastSet.reps;
+        }
+      });
     }
 
     function addSetRow(weight = '', reps = '', notes = '') {
@@ -728,7 +810,7 @@
         </div>
         <div>
           <label style="margin-bottom:2px; font-size:0.75rem;">Set Note / Comment</label>
-          <input type="text" class="set-comment" placeholder="e.g. Smooth cadence, paused 1 sec, RPE 8" value="${notes}">
+          <input type="text" class="set-comment" placeholder="e.g. Smooth bar speed, paused 1 sec, RPE 8" value="${notes}">
         </div>
       `;
       container.appendChild(setDiv);
@@ -739,6 +821,7 @@
       Array.from(container.children).forEach((el, idx) => {
         el.querySelector('.set-header span').textContent = `Set ${idx + 1}`;
       });
+      applyHistoricalBadges();
     }
 
     function saveExerciseSession() {
@@ -768,7 +851,7 @@
       });
 
       if (sets.length === 0) {
-        alert('Please record at least one set with weight or reps.');
+        alert('Please record at least one completed set with weight or reps.');
         return;
       }
 
@@ -782,17 +865,15 @@
       workoutData.unshift(entry);
       localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(workoutData));
 
-      // Add to library automatically if new
       if (!exerciseLibrary.includes(exercise)) {
         exerciseLibrary.push(exercise);
         syncLibraryUI();
       }
 
-      // Reset logger
       document.getElementById('exercise-name').value = '';
       document.getElementById('last-perf-box').style.display = 'none';
-      document.getElementById('sets-wrapper').innerHTML = '';
-      addSetRow();
+      currentLastRecordedSession = null;
+      resetToFourSets();
       syncLibraryUI();
 
       alert(`Session for "${exercise}" saved to archive!`);
