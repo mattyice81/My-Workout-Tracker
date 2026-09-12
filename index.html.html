@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Tracker & Routine Scheduler</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --accent: #22c55e;
+      --accent-danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: #0f172a;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--primary);
+      border-color: transparent;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .col {
+      flex: 1;
+    }
+
+    /* Routine Bar */
+    .schedule-bar {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .schedule-bar-info {
+      font-size: 0.88rem;
+    }
+
+    .schedule-bar-info span {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Last performance recall box */
+    .last-performance {
+      background: rgba(56, 189, 248, 0.06);
+      border-left: 4px solid var(--primary);
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.88rem;
+    }
+
+    .last-performance h4 {
+      color: var(--primary);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .last-perf-details {
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* Sets Table */
+    .sets-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .set-row {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .set-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .set-inputs {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary { background: var(--primary); color: #0f172a; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-accent { background: var(--accent); color: #0f172a; }
+    .btn-accent:hover { filter: brightness(1.1); }
+
+    .btn-secondary { background: var(--card-border); color: var(--text); }
+    .btn-secondary:hover { background: #475569; }
+
+    .btn-danger { background: transparent; color: var(--accent-danger); border: 1px solid var(--accent-danger); }
+    .btn-danger:hover { background: var(--accent-danger); color: #fff; }
+
+    .btn-sm { padding: 5px 10px; font-size: 0.8rem; border-radius: 6px; }
+
+    /* Schedule Config Layout */
+    .day-block {
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .day-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .exercise-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card-border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 0.82rem;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    .chip-delete {
+      cursor: pointer;
+      color: var(--accent-danger);
+      font-weight: bold;
+    }
+
+    /* History List */
+    .history-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .history-card-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+
+    .history-card-header h3 {
+      font-size: 1.05rem;
+      color: var(--primary);
+    }
+
+    .history-date {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .history-set {
+      font-size: 0.9rem;
+      padding: 4px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .history-comment {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding-left: 8px;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 30px;
+      font-size: 0.95rem;
+    }
+
+    .data-tools {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Workout Command</h1>
+      <nav class="nav-tabs">
+        <button class="nav-btn active" id="tab-log" onclick="switchTab('log')">Track</button>
+        <button class="nav-btn" id="tab-schedule" onclick="switchTab('schedule')">Routines & Exercises</button>
+        <button class="nav-btn" id="tab-history" onclick="switchTab('history')">Archive</button>
+      </nav>
+    </header>
+
+    <!-- VIEW 1: TRACK WORKOUT -->
+    <div id="view-log" class="card">
+      <div class="row">
+        <div class="col">
+          <label for="workout-date">Date</label>
+          <input type="date" id="workout-date" onchange="updateScheduledDay()" />
+        </div>
+        <div class="col" style="flex: 1.5;">
+          <label for="exercise-name">Exercise</label>
+          <input 
+            type="text" 
+            id="exercise-name" 
+            placeholder="Type or pick scheduled..." 
+            list="exercise-datalist"
+            oninput="checkPreviousHistory()"
+          />
+          <datalist id="exercise-datalist"></datalist>
+        </div>
+      </div>
+
+      <!-- Routine Quick-Bar -->
+      <div id="routine-quick-bar" class="schedule-bar">
+        <div class="schedule-bar-info">
+          Scheduled for <span id="current-day-label">Monday</span>: <span id="routine-summary-text" style="color:var(--text); font-weight:normal;">None</span>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="selectFromDailyRoutine()">Pick Exercise</button>
+      </div>
+
+      <!-- Last performance preview -->
+      <div id="last-perf-box" class="last-performance" style="display: none;">
+        <h4>Last Logged Performance</h4>
+        <div id="last-perf-content" class="last-perf-details"></div>
+      </div>
+
+      <!-- Sets section -->
+      <div>
+        <label>Sets, Pounds & Reps</label>
+        <div id="sets-wrapper" class="sets-container"></div>
+        <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 10px;" onclick="addSetRow()">+ Add Set</button>
+      </div>
+
+      <button type="button" class="btn btn-accent" style="margin-top: 6px;" onclick="saveExerciseSession()">Save Set To Log</button>
+    </div>
+
+    <!-- VIEW 2: ROUTINES & EXERCISE LIBRARY -->
+    <div id="view-schedule" style="display: none;" class="card">
+      <div>
+        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Exercise Library</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Add exercises to your master catalog so you can schedule them to specific workout days.</p>
+        
+        <div class="row">
+          <div class="col" style="flex: 2;">
+            <input type="text" id="new-library-exercise" placeholder="e.g. Barbell Bench Press, Incline DB Press, Chin-ups" />
+          </div>
+          <button type="button" class="btn btn-primary" onclick="addLibraryExercise()">Add to Library</button>
+        </div>
+
+        <div id="library-chip-container" style="margin-top: 12px;"></div>
+      </div>
+
+      <hr style="border-color: var(--card-border);" />
+
+      <div>
+        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Weekly Scheduled Routines</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Select a day and attach recurring exercises. Every time you log on that day, your custom routine loads automatically.</p>
+
+        <div class="row" style="margin-bottom: 14px;">
+          <div class="col">
+            <label>Day of Week</label>
+            <select id="schedule-day-select">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+          <div class="col" style="flex: 1.5;">
+            <label>Exercise to Schedule</label>
+            <select id="schedule-exercise-select"></select>
+          </div>
+          <div style="display: flex; align-items: flex-end;">
+            <button type="button" class="btn btn-primary" onclick="assignExerciseToDay()">Assign</button>
+          </div>
+        </div>
+
+        <!-- Render Days -->
+        <div id="days-schedule-container"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: ARCHIVE / HISTORY -->
+    <div id="view-history" style="display: none;">
+      <div class="card" style="margin-bottom: 12px; padding: 12px;">
+        <input type="text" id="search-history" placeholder="Filter archive by exercise name..." oninput="renderHistory()" />
+      </div>
+      <div id="history-container"></div>
+      
+      <div class="data-tools">
+        <button class="btn btn-secondary btn-sm" onclick="exportData()">Export Complete Backup (JSON)</button>
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">Import Backup</button>
+        <input type="file" id="import-file" style="display:none" onchange="importData(event)" accept=".json" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY_WORKOUTS = 'workout_records_archive_v2';
+    const STORAGE_KEY_LIBRARY = 'workout_library_v2';
+    const STORAGE_KEY_SCHEDULE = 'workout_weekly_schedule_v2';
+
+    const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    // Default Seed Data
+    const DEFAULT_LIBRARY = [
+      "Barbell Bench Press",
+      "Incline Dumbbell Bench Press",
+      "Barbell Back Squat",
+      "Leg Press",
+      "Barbell Deadlift",
+      "Overhead Shoulder Press",
+      "Barbell Bent-Over Row",
+      "Pull-ups",
+      "Dips"
+    ];
+
+    const DEFAULT_SCHEDULE = {
+      "Monday": ["Barbell Bench Press", "Incline Dumbbell Bench Press", "Dips"],
+      "Tuesday": ["Barbell Back Squat", "Leg Press"],
+      "Wednesday": ["Barbell Bent-Over Row", "Pull-ups"],
+      "Thursday": ["Overhead Shoulder Press", "Dips"],
+      "Friday": ["Barbell Deadlift", "Barbell Back Squat"],
+      "Saturday": [],
+      "Sunday": []
+    };
+
+    // State
+    let workoutData = JSON.parse(localStorage.getItem(STORAGE_KEY_WORKOUTS)) || [];
+    let exerciseLibrary = JSON.parse(localStorage.getItem(STORAGE_KEY_LIBRARY)) || DEFAULT_LIBRARY;
+    let weeklySchedule = JSON.parse(localStorage.getItem(STORAGE_KEY_SCHEDULE)) || DEFAULT_SCHEDULE;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('workout-date').value = new Date().toISOString().split('T')[0];
+      syncLibraryUI();
+      renderWeeklySchedule();
+      updateScheduledDay();
+      addSetRow();
+    });
+
+    function switchTab(tab) {
+      const views = {
+        log: document.getElementById('view-log'),
+        schedule: document.getElementById('view-schedule'),
+        history: document.getElementById('view-history')
+      };
+      const tabs = {
+        log: document.getElementById('tab-log'),
+        schedule: document.getElementById('tab-schedule'),
+        history: document.getElementById('tab-history')
+      };
+
+      Object.keys(views).forEach(k => {
+        views[k].style.display = (k === tab) ? (k === 'log' || k === 'schedule' ? 'flex' : 'block') : 'none';
+        tabs[k].classList.toggle('active', k === tab);
+      });
+
+      if (tab === 'history') renderHistory();
+      if (tab === 'log') updateScheduledDay();
+    }
+
+    /* -----------------------------
+       EXERCISE LIBRARY & SCHEDULE
+    ------------------------------ */
+    function syncLibraryUI() {
+      // Save
+      localStorage.setItem(STORAGE_KEY_LIBRARY, JSON.stringify(exerciseLibrary));
+
+      // Datalist in Tracker
+      const datalist = document.getElementById('exercise-datalist');
+      datalist.innerHTML = '';
+      const allKnown = [...new Set([...exerciseLibrary, ...workoutData.map(e => e.exercise.trim())])].sort();
+      allKnown.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        datalist.appendChild(opt);
+      });
+
+      // Dropdown in Scheduler
+      const select = document.getElementById('schedule-exercise-select');
+      select.innerHTML = '';
+      exerciseLibrary.sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+      });
+
+      // Chips in Library View
+      const chipContainer = document.getElementById('library-chip-container');
+      chipContainer.innerHTML = '';
+      exerciseLibrary.forEach(name => {
+        const chip = document.createElement('span');
+        chip.className = 'exercise-chip';
+        chip.innerHTML = `${name} <span class="chip-delete" onclick="removeLibraryExercise('${name.replace(/'/g, "\\'")}')">&times;</span>`;
+        chipContainer.appendChild(chip);
+      });
+    }
+
+    function addLibraryExercise() {
+      const input = document.getElementById('new-library-exercise');
+      const val = input.value.trim();
+      if (!val) return;
+      if (!exerciseLibrary.includes(val)) {
+        exerciseLibrary.push(val);
+        syncLibraryUI();
+      }
+      input.value = '';
+    }
+
+    function removeLibraryExercise(name) {
+      if (confirm(`Remove "${name}" from master library?`)) {
+        exerciseLibrary = exerciseLibrary.filter(e => e !== name);
+        // Clean from schedules
+        Object.keys(weeklySchedule).forEach(day => {
+          weeklySchedule[day] = weeklySchedule[day].filter(e => e !== name);
+        });
+        localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+        syncLibraryUI();
+        renderWeeklySchedule();
+        updateScheduledDay();
+      }
+    }
+
+    function assignExerciseToDay() {
+      const day = document.getElementById('schedule-day-select').value;
+      const exercise = document.getElementById('schedule-exercise-select').value;
+
+      if (!exercise) {
+        alert('Please add exercises to your library first.');
+        return;
+      }
+
+      if (!weeklySchedule[day]) weeklySchedule[day] = [];
+
+      if (weeklySchedule[day].includes(exercise)) {
+        alert(`${exercise} is already scheduled for ${day}.`);
+        return;
+      }
+
+      weeklySchedule[day].push(exercise);
+      localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+      renderWeeklySchedule();
+      updateScheduledDay();
+    }
+
+    function removeExerciseFromDay(day, exercise) {
+      weeklySchedule[day] = weeklySchedule[day].filter(e => e !== exercise);
+      localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+      renderWeeklySchedule();
+      updateScheduledDay();
+    }
+
+    function renderWeeklySchedule() {
+      const container = document.getElementById('days-schedule-container');
+      container.innerHTML = '';
+
+      const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+      orderedDays.forEach(day => {
+        const block = document.createElement('div');
+        block.className = 'day-block';
+
+        const exercises = weeklySchedule[day] || [];
+        let chipsHtml = exercises.map(ex => `
+          <span class="exercise-chip">
+            ${ex}
+            <span class="chip-delete" onclick="removeExerciseFromDay('${day}', '${ex.replace(/'/g, "\\'")}')">&times;</span>
+          </span>
+        `).join('');
+
+        if (exercises.length === 0) {
+          chipsHtml = `<span style="font-size:0.8rem; color:var(--text-muted);">No exercises scheduled. Rest or open day.</span>`;
+        }
+
+        block.innerHTML = `
+          <div class="day-title">
+            <span>${day}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">${exercises.length} Exercises</span>
+          </div>
+          <div>${chipsHtml}</div>
+        `;
+        container.appendChild(block);
+      });
+    }
+
+    /* -----------------------------
+       WORKOUT TRACKING & RECALL
+    ------------------------------ */
+    function getSelectedDayName() {
+      const dateVal = document.getElementById('workout-date').value;
+      if (!dateVal) return DAYS_OF_WEEK[new Date().getDay()];
+      const parts = dateVal.split('-');
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      return DAYS_OF_WEEK[d.getDay()];
+    }
+
+    function updateScheduledDay() {
+      const dayName = getSelectedDayName();
+      document.getElementById('current-day-label').textContent = dayName;
+
+      const scheduled = weeklySchedule[dayName] || [];
+      const summaryElem = document.getElementById('routine-summary-text');
+
+      if (scheduled.length > 0) {
+        summaryElem.textContent = scheduled.join(", ");
+      } else {
+        summaryElem.textContent = "No specific routine set for this day.";
+      }
+    }
+
+    function selectFromDailyRoutine() {
+      const dayName = getSelectedDayName();
+      const scheduled = weeklySchedule[dayName] || [];
+
+      if (scheduled.length === 0) {
+        alert(`No recurring routine found for ${dayName}. Visit "Routines & Exercises" to assign one.`);
+        return;
+      }
+
+      const exerciseInput = document.getElementById('exercise-name');
+      const currentIndex = scheduled.indexOf(exerciseInput.value);
+      const nextIndex = (currentIndex + 1) % scheduled.length;
+      exerciseInput.value = scheduled[nextIndex];
+      checkPreviousHistory();
+    }
+
+    function checkPreviousHistory() {
+      const input = document.getElementById('exercise-name').value.trim().toLowerCase();
+      const perfBox = document.getElementById('last-perf-box');
+      const perfContent = document.getElementById('last-perf-content');
+
+      if (!input) {
+        perfBox.style.display = 'none';
+        return;
+      }
+
+      const matches = workoutData
+        .filter(entry => entry.exercise.trim().toLowerCase() === input)
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      if (matches.length > 0) {
+        const last = matches[0];
+        let setSummary = last.sets.map((s, idx) => {
+          let str = `Set ${idx + 1}: ${s.weight ? s.weight + ' lbs' : 'Bodyweight'} × ${s.reps} reps`;
+          if (s.comment) str += ` <span style="color: var(--text-muted);">("${s.comment}")</span>`;
+          return str;
+        }).join('<br>');
+
+        perfContent.innerHTML = `
+          <strong>Date:</strong> ${last.date}<br>
+          ${setSummary}
+        `;
+        perfBox.style.display = 'block';
+      } else {
+        perfBox.style.display = 'none';
+      }
+    }
+
+    function addSetRow(weight = '', reps = '', notes = '') {
+      const container = document.getElementById('sets-wrapper');
+      const setIndex = container.children.length + 1;
+
+      const setDiv = document.createElement('div');
+      setDiv.className = 'set-row';
+      setDiv.innerHTML = `
+        <div class="set-header">
+          <span>Set ${setIndex}</span>
+          ${setIndex > 1 ? `<button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.set-row').remove(); renumberSets();">Remove</button>` : ''}
+        </div>
+        <div class="set-inputs">
+          <div style="flex: 1;">
+            <label style="margin-bottom:2px; font-size:0.75rem;">Pounds (lbs)</label>
+            <input type="number" step="any" class="set-weight" placeholder="e.g. 225" value="${weight}">
+          </div>
+          <div style="flex: 1;">
+            <label style="margin-bottom:2px; font-size:0.75rem;">Reps</label>
+            <input type="number" class="set-reps" placeholder="e.g. 8" value="${reps}">
+          </div>
+        </div>
+        <div>
+          <label style="margin-bottom:2px; font-size:0.75rem;">Set Note / Comment</label>
+          <input type="text" class="set-comment" placeholder="e.g. Smooth cadence, paused 1 sec, RPE 8" value="${notes}">
+        </div>
+      `;
+      container.appendChild(setDiv);
+    }
+
+    function renumberSets() {
+      const container = document.getElementById('sets-wrapper');
+      Array.from(container.children).forEach((el, idx) => {
+        el.querySelector('.set-header span').textContent = `Set ${idx + 1}`;
+      });
+    }
+
+    function saveExerciseSession() {
+      const date = document.getElementById('workout-date').value;
+      const exercise = document.getElementById('exercise-name').value.trim();
+
+      if (!date || !exercise) {
+        alert('Please specify both a date and exercise name.');
+        return;
+      }
+
+      const setRows = document.querySelectorAll('#sets-wrapper .set-row');
+      const sets = [];
+
+      setRows.forEach(row => {
+        const weight = row.querySelector('.set-weight').value;
+        const reps = row.querySelector('.set-reps').value;
+        const comment = row.querySelector('.set-comment').value.trim();
+
+        if (reps || weight) {
+          sets.push({
+            weight: weight || '0',
+            reps: reps || '0',
+            comment: comment
+          });
+        }
+      });
+
+      if (sets.length === 0) {
+        alert('Please record at least one set with weight or reps.');
+        return;
+      }
+
+      const entry = {
+        id: Date.now().toString(),
+        date: date,
+        exercise: exercise,
+        sets: sets
+      };
+
+      workoutData.unshift(entry);
+      localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(workoutData));
+
+      // Add to library automatically if new
+      if (!exerciseLibrary.includes(exercise)) {
+        exerciseLibrary.push(exercise);
+        syncLibraryUI();
+      }
+
+      // Reset logger
+      document.getElementById('exercise-name').value = '';
+      document.getElementById('last-perf-box').style.display = 'none';
+      document.getElementById('sets-wrapper').innerHTML = '';
+      addSetRow();
+      syncLibraryUI();
+
+      alert(`Session for "${exercise}" saved to archive!`);
+    }
+
+    /* -----------------------------
+       ARCHIVE & BACKUP
+    ------------------------------ */
+    function renderHistory() {
+      const container = document.getElementById('history-container');
+      const filter = (document.getElementById('search-history').value || '').trim().toLowerCase();
+      container.innerHTML = '';
+
+      const filtered = workoutData.filter(item => 
+        !filter || item.exercise.toLowerCase().includes(filter)
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">No archived sets match your criteria.</div>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'history-card';
+
+        let setsHtml = item.sets.map((s, i) => `
+          <div class="history-set">
+            <div><strong>Set ${i + 1}:</strong> ${s.weight} lbs × ${s.reps} reps</div>
+            ${s.comment ? `<div class="history-comment">↳ Note: ${s.comment}</div>` : ''}
+          </div>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="history-card-header">
+            <h3>${item.exercise}</h3>
+            <span class="history-date">${item.date}</span>
+          </div>
+          ${setsHtml}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function exportData() {
+      const fullPayload = {
+        workouts: workoutData,
+        library: exerciseLibrary,
+        schedule: weeklySchedule,
+        exportDate: new Date().toISOString()
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullPayload, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `workout_tracker_backup_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.workouts && imported.library && imported.schedule) {
+            workoutData = imported.workouts;
+            exerciseLibrary = imported.library;
+            weeklySchedule = imported.schedule;
+          } else if (Array.isArray(imported)) {
+            workoutData = imported;
+          } else {
+            alert('Unrecognized backup structure.');
+            return;
+          }
+
+          localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(workoutData));
+          localStorage.setItem(STORAGE_KEY_LIBRARY, JSON.stringify(exerciseLibrary));
+          localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+
+          syncLibraryUI();
+          renderWeeklySchedule();
+          updateScheduledDay();
+          renderHistory();
+          alert('Data and schedules imported successfully!');
+        } catch (err) {
+          alert('Error parsing JSON backup file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+  </script>
+</body>
+</html>
