@@ -16,7 +16,6 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --input-bg: #0f172a;
-      --badge-bg: #1e3a5f;
     }
 
     * {
@@ -46,16 +45,45 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 8px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
       flex-wrap: wrap;
       gap: 12px;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     h1 {
       font-size: 1.4rem;
       font-weight: 700;
       letter-spacing: -0.5px;
+    }
+
+    .user-select-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-select-bar label {
+      margin-bottom: 0;
+      font-size: 0.75rem;
+      color: var(--primary);
+    }
+
+    .user-dropdown {
+      background: var(--input-bg);
+      border: 1px solid var(--primary);
+      color: var(--text);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     .nav-tabs {
@@ -150,7 +178,6 @@
       color: var(--primary);
     }
 
-    /* Enhanced Last Performance Box */
     .last-performance {
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid var(--primary);
@@ -261,7 +288,7 @@
     .btn-danger { background: transparent; color: var(--accent-danger); border: 1px solid var(--accent-danger); }
     .btn-danger:hover { background: var(--accent-danger); color: #fff; }
 
-    .btn-sm { padding: 5px 10px; font-size: 0.8rem; border-radius: 6px; }
+    .btn-sm { padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; }
 
     .day-block {
       border: 1px solid var(--card-border);
@@ -359,10 +386,17 @@
 
   <div class="container">
     <header>
-      <h1>Workout Command</h1>
+      <div class="header-left">
+        <h1>Workout Command</h1>
+        <div class="user-select-bar">
+          <label for="active-user-select">Athlete:</label>
+          <select id="active-user-select" class="user-dropdown" onchange="changeUser(this.value)"></select>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="promptNewUser()">+ New User</button>
+        </div>
+      </div>
       <nav class="nav-tabs">
         <button class="nav-btn active" id="tab-log" onclick="switchTab('log')">Track</button>
-        <button class="nav-btn" id="tab-schedule" onclick="switchTab('schedule')">Routines & Exercises</button>
+        <button class="nav-btn" id="tab-schedule" onclick="switchTab('schedule')">Routines</button>
         <button class="nav-btn" id="tab-history" onclick="switchTab('history')">Archive</button>
       </nav>
     </header>
@@ -421,8 +455,8 @@
     <!-- VIEW 2: ROUTINES & EXERCISE LIBRARY -->
     <div id="view-schedule" style="display: none;" class="card">
       <div>
-        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Exercise Library</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Add exercises to your master catalog so you can schedule them to specific workout days.</p>
+        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Exercise Library (<span class="current-user-display"></span>)</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Add exercises to your personal catalog to schedule them to recurring workout days.</p>
         
         <div class="row">
           <div class="col" style="flex: 2;">
@@ -437,8 +471,8 @@
       <hr style="border-color: var(--card-border);" />
 
       <div>
-        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Weekly Scheduled Routines</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Select a day and attach recurring exercises. Every time you log on that day, your custom routine loads automatically.</p>
+        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Weekly Scheduled Routines (<span class="current-user-display"></span>)</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Attach recurring exercises to days of the week. These routines load automatically when tracking on that day.</p>
 
         <div class="row" style="margin-bottom: 14px;">
           <div class="col">
@@ -474,7 +508,7 @@
       <div id="history-container"></div>
       
       <div class="data-tools">
-        <button class="btn btn-secondary btn-sm" onclick="exportData()">Export Complete Backup (JSON)</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportData()">Export All Users (JSON)</button>
         <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">Import Backup</button>
         <input type="file" id="import-file" style="display:none" onchange="importData(event)" accept=".json" />
       </div>
@@ -482,10 +516,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY_WORKOUTS = 'workout_records_archive_v2';
-    const STORAGE_KEY_LIBRARY = 'workout_library_v2';
-    const STORAGE_KEY_SCHEDULE = 'workout_weekly_schedule_v2';
-
+    const STORAGE_KEY_PROFILES = 'workout_multiuser_profiles_v3';
     const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     const DEFAULT_LIBRARY = [
@@ -510,18 +541,108 @@
       "Sunday": []
     };
 
-    let workoutData = JSON.parse(localStorage.getItem(STORAGE_KEY_WORKOUTS)) || [];
-    let exerciseLibrary = JSON.parse(localStorage.getItem(STORAGE_KEY_LIBRARY)) || DEFAULT_LIBRARY;
-    let weeklySchedule = JSON.parse(localStorage.getItem(STORAGE_KEY_SCHEDULE)) || DEFAULT_SCHEDULE;
+    // State structure
+    let appData = JSON.parse(localStorage.getItem(STORAGE_KEY_PROFILES)) || {
+      activeUser: "User 1",
+      users: {
+        "User 1": {
+          workouts: [],
+          library: [...DEFAULT_LIBRARY],
+          schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE))
+        }
+      }
+    };
+
+    // Migration from older single-user versions if present
+    const legacyWorkouts = localStorage.getItem('workout_records_archive_v2');
+    if (legacyWorkouts && !localStorage.getItem(STORAGE_KEY_PROFILES)) {
+      try {
+        appData.users["User 1"].workouts = JSON.parse(legacyWorkouts) || [];
+        const legacyLib = localStorage.getItem('workout_library_v2');
+        if (legacyLib) appData.users["User 1"].library = JSON.parse(legacyLib);
+        const legacySched = localStorage.getItem('workout_weekly_schedule_v2');
+        if (legacySched) appData.users["User 1"].schedule = JSON.parse(legacySched);
+        saveAppData();
+      } catch (e) {}
+    }
+
     let currentLastRecordedSession = null;
+
+    function saveAppData() {
+      localStorage.setItem(STORAGE_KEY_PROFILES, JSON.stringify(appData));
+    }
+
+    function getActiveUserData() {
+      if (!appData.users[appData.activeUser]) {
+        appData.users[appData.activeUser] = {
+          workouts: [],
+          library: [...DEFAULT_LIBRARY],
+          schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE))
+        };
+        saveAppData();
+      }
+      return appData.users[appData.activeUser];
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('workout-date').value = new Date().toISOString().split('T')[0];
+      populateUserDropdown();
+      refreshUserViews();
+    });
+
+    function populateUserDropdown() {
+      const select = document.getElementById('active-user-select');
+      select.innerHTML = '';
+      Object.keys(appData.users).forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u;
+        opt.textContent = u;
+        if (u === appData.activeUser) opt.selected = true;
+        select.appendChild(opt);
+      });
+      document.querySelectorAll('.current-user-display').forEach(el => el.textContent = appData.activeUser);
+    }
+
+    function promptNewUser() {
+      const name = prompt("Enter new user/athlete name:");
+      if (!name) return;
+      const cleanName = name.trim();
+      if (!cleanName) return;
+
+      if (appData.users[cleanName]) {
+        alert("A profile with that name already exists.");
+        changeUser(cleanName);
+        return;
+      }
+
+      appData.users[cleanName] = {
+        workouts: [],
+        library: [...DEFAULT_LIBRARY],
+        schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE))
+      };
+      appData.activeUser = cleanName;
+      saveAppData();
+      populateUserDropdown();
+      refreshUserViews();
+    }
+
+    function changeUser(userName) {
+      appData.activeUser = userName;
+      saveAppData();
+      populateUserDropdown();
+      refreshUserViews();
+    }
+
+    function refreshUserViews() {
       syncLibraryUI();
       renderWeeklySchedule();
       updateScheduledDay();
       resetToFourSets();
-    });
+      document.getElementById('exercise-name').value = '';
+      document.getElementById('last-perf-box').style.display = 'none';
+      currentLastRecordedSession = null;
+      renderHistory();
+    }
 
     function resetToFourSets() {
       const wrapper = document.getElementById('sets-wrapper');
@@ -554,14 +675,13 @@
     }
 
     /* -----------------------------
-       EXERCISE LIBRARY & SCHEDULE
+       LIBRARY & SCHEDULE PER USER
     ------------------------------ */
     function syncLibraryUI() {
-      localStorage.setItem(STORAGE_KEY_LIBRARY, JSON.stringify(exerciseLibrary));
-
+      const uData = getActiveUserData();
       const datalist = document.getElementById('exercise-datalist');
       datalist.innerHTML = '';
-      const allKnown = [...new Set([...exerciseLibrary, ...workoutData.map(e => e.exercise.trim())])].sort();
+      const allKnown = [...new Set([...uData.library, ...uData.workouts.map(e => e.exercise.trim())])].sort();
       allKnown.forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
@@ -570,7 +690,7 @@
 
       const select = document.getElementById('schedule-exercise-select');
       select.innerHTML = '';
-      exerciseLibrary.sort().forEach(name => {
+      uData.library.sort().forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
         opt.textContent = name;
@@ -579,7 +699,7 @@
 
       const chipContainer = document.getElementById('library-chip-container');
       chipContainer.innerHTML = '';
-      exerciseLibrary.forEach(name => {
+      uData.library.forEach(name => {
         const chip = document.createElement('span');
         chip.className = 'exercise-chip';
         chip.innerHTML = `${name} <span class="chip-delete" onclick="removeLibraryExercise('${name.replace(/'/g, "\\'")}')">&times;</span>`;
@@ -588,23 +708,26 @@
     }
 
     function addLibraryExercise() {
+      const uData = getActiveUserData();
       const input = document.getElementById('new-library-exercise');
       const val = input.value.trim();
       if (!val) return;
-      if (!exerciseLibrary.includes(val)) {
-        exerciseLibrary.push(val);
+      if (!uData.library.includes(val)) {
+        uData.library.push(val);
+        saveAppData();
         syncLibraryUI();
       }
       input.value = '';
     }
 
     function removeLibraryExercise(name) {
-      if (confirm(`Remove "${name}" from master library?`)) {
-        exerciseLibrary = exerciseLibrary.filter(e => e !== name);
-        Object.keys(weeklySchedule).forEach(day => {
-          weeklySchedule[day] = weeklySchedule[day].filter(e => e !== name);
+      const uData = getActiveUserData();
+      if (confirm(`Remove "${name}" from ${appData.activeUser}'s library?`)) {
+        uData.library = uData.library.filter(e => e !== name);
+        Object.keys(uData.schedule).forEach(day => {
+          uData.schedule[day] = uData.schedule[day].filter(e => e !== name);
         });
-        localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+        saveAppData();
         syncLibraryUI();
         renderWeeklySchedule();
         updateScheduledDay();
@@ -612,6 +735,7 @@
     }
 
     function assignExerciseToDay() {
+      const uData = getActiveUserData();
       const day = document.getElementById('schedule-day-select').value;
       const exercise = document.getElementById('schedule-exercise-select').value;
 
@@ -620,27 +744,29 @@
         return;
       }
 
-      if (!weeklySchedule[day]) weeklySchedule[day] = [];
+      if (!uData.schedule[day]) uData.schedule[day] = [];
 
-      if (weeklySchedule[day].includes(exercise)) {
+      if (uData.schedule[day].includes(exercise)) {
         alert(`${exercise} is already scheduled for ${day}.`);
         return;
       }
 
-      weeklySchedule[day].push(exercise);
-      localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+      uData.schedule[day].push(exercise);
+      saveAppData();
       renderWeeklySchedule();
       updateScheduledDay();
     }
 
     function removeExerciseFromDay(day, exercise) {
-      weeklySchedule[day] = weeklySchedule[day].filter(e => e !== exercise);
-      localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
+      const uData = getActiveUserData();
+      uData.schedule[day] = uData.schedule[day].filter(e => e !== exercise);
+      saveAppData();
       renderWeeklySchedule();
       updateScheduledDay();
     }
 
     function renderWeeklySchedule() {
+      const uData = getActiveUserData();
       const container = document.getElementById('days-schedule-container');
       container.innerHTML = '';
 
@@ -650,7 +776,7 @@
         const block = document.createElement('div');
         block.className = 'day-block';
 
-        const exercises = weeklySchedule[day] || [];
+        const exercises = uData.schedule[day] || [];
         let chipsHtml = exercises.map(ex => `
           <span class="exercise-chip">
             ${ex}
@@ -674,7 +800,7 @@
     }
 
     /* -----------------------------
-       WORKOUT TRACKING & RECALL
+       TRACKING & RECALL PER USER
     ------------------------------ */
     function getSelectedDayName() {
       const dateVal = document.getElementById('workout-date').value;
@@ -685,10 +811,11 @@
     }
 
     function updateScheduledDay() {
+      const uData = getActiveUserData();
       const dayName = getSelectedDayName();
       document.getElementById('current-day-label').textContent = dayName;
 
-      const scheduled = weeklySchedule[dayName] || [];
+      const scheduled = uData.schedule[dayName] || [];
       const summaryElem = document.getElementById('routine-summary-text');
 
       if (scheduled.length > 0) {
@@ -699,11 +826,12 @@
     }
 
     function selectFromDailyRoutine() {
+      const uData = getActiveUserData();
       const dayName = getSelectedDayName();
-      const scheduled = weeklySchedule[dayName] || [];
+      const scheduled = uData.schedule[dayName] || [];
 
       if (scheduled.length === 0) {
-        alert(`No recurring routine found for ${dayName}. Visit "Routines & Exercises" to assign one.`);
+        alert(`No recurring routine found for ${dayName}. Visit "Routines" to assign one.`);
         return;
       }
 
@@ -715,6 +843,7 @@
     }
 
     function checkPreviousHistory() {
+      const uData = getActiveUserData();
       const input = document.getElementById('exercise-name').value.trim().toLowerCase();
       const perfBox = document.getElementById('last-perf-box');
       const perfContent = document.getElementById('last-perf-content');
@@ -727,13 +856,13 @@
         return;
       }
 
-      const matches = workoutData
+      const matches = uData.workouts
         .filter(entry => entry.exercise.trim().toLowerCase() === input)
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       if (matches.length > 0) {
         currentLastRecordedSession = matches[0];
-        perfTitle.textContent = `Last Done: ${currentLastRecordedSession.date}`;
+        perfTitle.textContent = `Last Done (${appData.activeUser}): ${currentLastRecordedSession.date}`;
         
         let gridHtml = `<div class="last-perf-grid">`;
         currentLastRecordedSession.sets.forEach((s, idx) => {
@@ -825,6 +954,7 @@
     }
 
     function saveExerciseSession() {
+      const uData = getActiveUserData();
       const date = document.getElementById('workout-date').value;
       const exercise = document.getElementById('exercise-name').value.trim();
 
@@ -862,13 +992,13 @@
         sets: sets
       };
 
-      workoutData.unshift(entry);
-      localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(workoutData));
+      uData.workouts.unshift(entry);
 
-      if (!exerciseLibrary.includes(exercise)) {
-        exerciseLibrary.push(exercise);
-        syncLibraryUI();
+      if (!uData.library.includes(exercise)) {
+        uData.library.push(exercise);
       }
+
+      saveAppData();
 
       document.getElementById('exercise-name').value = '';
       document.getElementById('last-perf-box').style.display = 'none';
@@ -876,23 +1006,24 @@
       resetToFourSets();
       syncLibraryUI();
 
-      alert(`Session for "${exercise}" saved to archive!`);
+      alert(`Session for "${exercise}" saved for ${appData.activeUser}!`);
     }
 
     /* -----------------------------
        ARCHIVE & BACKUP
     ------------------------------ */
     function renderHistory() {
+      const uData = getActiveUserData();
       const container = document.getElementById('history-container');
       const filter = (document.getElementById('search-history').value || '').trim().toLowerCase();
       container.innerHTML = '';
 
-      const filtered = workoutData.filter(item => 
+      const filtered = uData.workouts.filter(item => 
         !filter || item.exercise.toLowerCase().includes(filter)
       );
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state">No archived sets match your criteria.</div>';
+        container.innerHTML = `<div class="empty-state">No archived sets found for ${appData.activeUser}.</div>`;
         return;
       }
 
@@ -920,15 +1051,13 @@
 
     function exportData() {
       const fullPayload = {
-        workouts: workoutData,
-        library: exerciseLibrary,
-        schedule: weeklySchedule,
+        appData: appData,
         exportDate: new Date().toISOString()
       };
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullPayload, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `workout_tracker_backup_${new Date().toISOString().split('T')[0]}.json`);
+      downloadAnchor.setAttribute("download", `all_athletes_workouts_${new Date().toISOString().split('T')[0]}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
@@ -942,26 +1071,29 @@
       reader.onload = function(e) {
         try {
           const imported = JSON.parse(e.target.result);
-          if (imported.workouts && imported.library && imported.schedule) {
-            workoutData = imported.workouts;
-            exerciseLibrary = imported.library;
-            weeklySchedule = imported.schedule;
-          } else if (Array.isArray(imported)) {
-            workoutData = imported;
+          if (imported.appData && imported.appData.users) {
+            appData = imported.appData;
+          } else if (imported.workouts && imported.library && imported.schedule) {
+            // Legacy single-user import
+            appData = {
+              activeUser: "User 1",
+              users: {
+                "User 1": {
+                  workouts: imported.workouts,
+                  library: imported.library,
+                  schedule: imported.schedule
+                }
+              }
+            };
           } else {
             alert('Unrecognized backup structure.');
             return;
           }
 
-          localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(workoutData));
-          localStorage.setItem(STORAGE_KEY_LIBRARY, JSON.stringify(exerciseLibrary));
-          localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(weeklySchedule));
-
-          syncLibraryUI();
-          renderWeeklySchedule();
-          updateScheduledDay();
-          renderHistory();
-          alert('Data and schedules imported successfully!');
+          saveAppData();
+          populateUserDropdown();
+          refreshUserViews();
+          alert('All profiles and records imported successfully!');
         } catch (err) {
           alert('Error parsing JSON backup file.');
         }
