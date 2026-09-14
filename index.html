@@ -12,6 +12,7 @@
       --primary: #38bdf8;
       --primary-hover: #0284c7;
       --accent: #22c55e;
+      --accent-hover: #16a34a;
       --accent-danger: #ef4444;
       --text: #f8fafc;
       --text-muted: #94a3b8;
@@ -63,1043 +64,388 @@
       letter-spacing: -0.5px;
     }
 
-    .user-select-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .user-select-bar label {
-      margin-bottom: 0;
-      font-size: 0.75rem;
-      color: var(--primary);
-    }
-
-    .user-dropdown {
-      background: var(--input-bg);
-      border: 1px solid var(--primary);
-      color: var(--text);
-      padding: 4px 8px;
-      border-radius: 6px;
+    .date-display {
       font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .nav-tabs {
-      display: flex;
-      gap: 6px;
-      background: var(--card-bg);
-      padding: 4px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-    }
-
-    .nav-btn {
-      background: transparent;
-      border: none;
       color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-
-    .nav-btn.active {
-      background: var(--primary);
-      color: #0f172a;
     }
 
     .card {
-      background: var(--card-bg);
+      background-color: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 18px;
+      border-radius: 10px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
 
     label {
       font-size: 0.8rem;
       font-weight: 600;
-      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 4px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
       display: block;
     }
 
-    input, select, textarea {
+    select, input {
       width: 100%;
+      padding: 10px 12px;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: 2px solid var(--primary);
-      border-color: transparent;
-    }
-
-    .row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .col {
-      flex: 1;
-    }
-
-    .schedule-bar {
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid var(--primary);
-      padding: 10px 14px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .schedule-bar-info {
-      font-size: 0.88rem;
-    }
-
-    .schedule-bar-info span {
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .last-performance {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid var(--primary);
-      border-left: 5px solid var(--primary);
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-    }
-
-    .last-performance-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .last-performance-header h4 {
-      color: var(--primary);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-    }
-
-    .last-perf-details {
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .last-perf-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .last-perf-chip {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid var(--card-border);
       border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 0.82rem;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
     }
 
-    .sets-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    select:focus, input:focus {
+      border-color: var(--primary);
     }
 
-    .set-row {
+    /* History Reference Section (Previous Day Only) */
+    .history-card {
       background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--card-border);
+      border: 1px dashed var(--card-border);
       border-radius: 8px;
       padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
     }
 
-    .set-header {
+    .history-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
-    .prev-lift-badge {
-      font-size: 0.78rem;
-      color: var(--primary);
-      background: rgba(56, 189, 248, 0.15);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: normal;
-    }
-
-    .set-inputs {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .btn {
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.2s;
-    }
-
-    .btn-primary { background: var(--primary); color: #0f172a; }
-    .btn-primary:hover { background: var(--primary-hover); }
-
-    .btn-accent { background: var(--accent); color: #0f172a; }
-    .btn-accent:hover { filter: brightness(1.1); }
-
-    .btn-secondary { background: var(--card-border); color: var(--text); }
-    .btn-secondary:hover { background: #475569; }
-
-    .btn-danger { background: transparent; color: var(--accent-danger); border: 1px solid var(--accent-danger); }
-    .btn-danger:hover { background: var(--accent-danger); color: #fff; }
-
-    .btn-sm { padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; }
-
-    .day-block {
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      background: rgba(15, 23, 42, 0.4);
-    }
-
-    .day-title {
-      font-size: 0.95rem;
+    .history-title {
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--primary);
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .exercise-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--card-border);
-      color: var(--text);
-      padding: 4px 10px;
-      border-radius: 16px;
-      font-size: 0.82rem;
-      margin-right: 6px;
-      margin-bottom: 6px;
-    }
-
-    .chip-delete {
-      cursor: pointer;
-      color: var(--accent-danger);
-      font-weight: bold;
-    }
-
-    .history-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .history-card-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--card-border);
-      padding-bottom: 8px;
-      margin-bottom: 8px;
-    }
-
-    .history-card-header h3 {
-      font-size: 1.05rem;
-      color: var(--primary);
+      text-transform: uppercase;
     }
 
     .history-date {
+      font-size: 0.75rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
     }
 
-    .history-set {
-      font-size: 0.9rem;
-      padding: 4px 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .history-comment {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-style: italic;
-      padding-left: 8px;
-    }
-
-    .empty-state {
-      text-align: center;
-      color: var(--text-muted);
-      padding: 30px;
-      font-size: 0.95rem;
-    }
-
-    .data-tools {
+    .history-list {
       display: flex;
       gap: 10px;
-      margin-top: 12px;
-      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .history-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .history-pill .set-tag {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .no-history {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Logging Inputs */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-save {
+      background: var(--accent);
+      color: #052e16;
+      border: none;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    .btn-save:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Today's Sets Logged */
+    .logged-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .logged-table th {
+      text-align: left;
+      padding: 8px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .logged-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      color: var(--accent-danger);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.8rem;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <header>
       <div class="header-left">
         <h1>Workout Command</h1>
-        <div class="user-select-bar">
-          <label for="active-user-select">Athlete:</label>
-          <select id="active-user-select" class="user-dropdown" onchange="changeUser(this.value)"></select>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="promptNewUser()">+ New User</button>
-        </div>
+        <span class="date-display" id="currentDateDisplay"></span>
       </div>
-      <nav class="nav-tabs">
-        <button class="nav-btn active" id="tab-log" onclick="switchTab('log')">Track</button>
-        <button class="nav-btn" id="tab-schedule" onclick="switchTab('schedule')">Routines</button>
-        <button class="nav-btn" id="tab-history" onclick="switchTab('history')">Archive</button>
-      </nav>
     </header>
 
-    <!-- VIEW 1: TRACK WORKOUT -->
-    <div id="view-log" class="card">
-      <div class="row">
-        <div class="col">
-          <label for="workout-date">Date</label>
-          <input type="date" id="workout-date" onchange="updateScheduledDay()" />
-        </div>
-        <div class="col" style="flex: 1.5;">
-          <label for="exercise-name">Exercise</label>
-          <input 
-            type="text" 
-            id="exercise-name" 
-            placeholder="Type or pick scheduled..." 
-            list="exercise-datalist"
-            oninput="checkPreviousHistory()"
-            onchange="checkPreviousHistory()"
-          />
-          <datalist id="exercise-datalist"></datalist>
-        </div>
-      </div>
-
-      <!-- Routine Quick-Bar -->
-      <div id="routine-quick-bar" class="schedule-bar">
-        <div class="schedule-bar-info">
-          Scheduled for <span id="current-day-label">Monday</span>: <span id="routine-summary-text" style="color:var(--text); font-weight:normal;">None</span>
-        </div>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="selectFromDailyRoutine()">Pick Exercise</button>
-      </div>
-
-      <!-- Last performance preview Banner -->
-      <div id="last-perf-box" class="last-performance" style="display: none;">
-        <div class="last-performance-header">
-          <h4 id="last-perf-title">Last Logged Performance</h4>
-          <button type="button" class="btn btn-primary btn-sm" onclick="copyPreviousLifts()">Copy Last Weights & Reps</button>
-        </div>
-        <div id="last-perf-content" class="last-perf-details"></div>
-      </div>
-
-      <!-- Sets section -->
+    <!-- Main Workout Entry Card -->
+    <div class="card">
       <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <label style="margin-bottom: 0;">Sets, Pounds & Reps (Defaults to 4 Sets)</label>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="resetToFourSets()">Reset 4 Sets</button>
-        </div>
-        <div id="sets-wrapper" class="sets-container"></div>
-        <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 10px;" onclick="addSetRow()">+ Add Set</button>
+        <label for="exerciseSelect">Exercise</label>
+        <select id="exerciseSelect">
+          <option value="Bench Press">Bench Press</option>
+          <option value="Barbell Squat">Barbell Squat</option>
+          <option value="Deadlift">Deadlift</option>
+          <option value="Overhead Press">Overhead Press</option>
+          <option value="Pull-ups">Pull-ups</option>
+        </select>
       </div>
 
-      <button type="button" class="btn btn-accent" style="margin-top: 6px;" onclick="saveExerciseSession()">Save Exercise To Log</button>
+      <!-- Reference: Prior Workout Last 3 Sets -->
+      <div class="history-card">
+        <div class="history-header">
+          <span class="history-title">Last Session (Previous Day)</span>
+          <span class="history-date" id="historyDate">-</span>
+        </div>
+        <div class="history-list" id="historyList">
+          <span class="no-history">No previous sessions found.</span>
+        </div>
+      </div>
+
+      <!-- Set Logging Inputs -->
+      <form id="setForm" onsubmit="event.preventDefault(); saveSet();">
+        <div class="input-grid">
+          <div>
+            <label for="weightInput">Weight (lbs/kg)</label>
+            <input type="number" id="weightInput" step="any" required placeholder="e.g. 185" />
+          </div>
+          <div>
+            <label for="repsInput">Reps</label>
+            <input type="number" id="repsInput" step="1" required placeholder="e.g. 8" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-save" style="margin-top: 14px;">Save Set</button>
+      </form>
     </div>
 
-    <!-- VIEW 2: ROUTINES & EXERCISE LIBRARY -->
-    <div id="view-schedule" style="display: none;" class="card">
-      <div>
-        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Exercise Library (<span class="current-user-display"></span>)</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Add exercises to your personal catalog to schedule them to recurring workout days.</p>
-        
-        <div class="row">
-          <div class="col" style="flex: 2;">
-            <input type="text" id="new-library-exercise" placeholder="e.g. Barbell Bench Press, Incline DB Press, Chin-ups" />
-          </div>
-          <button type="button" class="btn btn-primary" onclick="addLibraryExercise()">Add to Library</button>
-        </div>
-
-        <div id="library-chip-container" style="margin-top: 12px;"></div>
-      </div>
-
-      <hr style="border-color: var(--card-border);" />
-
-      <div>
-        <h2 style="font-size: 1.15rem; margin-bottom: 4px;">Weekly Scheduled Routines (<span class="current-user-display"></span>)</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Attach recurring exercises to days of the week. These routines load automatically when tracking on that day.</p>
-
-        <div class="row" style="margin-bottom: 14px;">
-          <div class="col">
-            <label>Day of Week</label>
-            <select id="schedule-day-select">
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
-          </div>
-          <div class="col" style="flex: 1.5;">
-            <label>Exercise to Schedule</label>
-            <select id="schedule-exercise-select"></select>
-          </div>
-          <div style="display: flex; align-items: flex-end;">
-            <button type="button" class="btn btn-primary" onclick="assignExerciseToDay()">Assign</button>
-          </div>
-        </div>
-
-        <div id="days-schedule-container"></div>
-      </div>
-    </div>
-
-    <!-- VIEW 3: ARCHIVE / HISTORY -->
-    <div id="view-history" style="display: none;">
-      <div class="card" style="margin-bottom: 12px; padding: 12px;">
-        <input type="text" id="search-history" placeholder="Filter archive by exercise name..." oninput="renderHistory()" />
-      </div>
-      <div id="history-container"></div>
-      
-      <div class="data-tools">
-        <button class="btn btn-secondary btn-sm" onclick="exportData()">Export All Users (JSON)</button>
-        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">Import Backup</button>
-        <input type="file" id="import-file" style="display:none" onchange="importData(event)" accept=".json" />
-      </div>
+    <!-- Today's Logged Sets for current exercise -->
+    <div class="card">
+      <h2 style="font-size: 1.1rem; font-weight: 600;">Today's Completed Sets</h2>
+      <table class="logged-table">
+        <thead>
+          <tr>
+            <th>Set</th>
+            <th>Weight</th>
+            <th>Reps</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="todaySetsTableBody">
+          <!-- Rows will be injected dynamically -->
+        </tbody>
+      </table>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY_PROFILES = 'workout_multiuser_profiles_v3';
-    const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    // Local date string in YYYY-MM-DD format
+    function getTodayString() {
+      const now = new Date();
+      return now.toISOString().split('T')[0];
+    }
 
-    const DEFAULT_LIBRARY = [
-      "Barbell Bench Press",
-      "Incline Dumbbell Bench Press",
-      "Barbell Back Squat",
-      "Leg Press",
-      "Barbell Deadlift",
-      "Overhead Shoulder Press",
-      "Barbell Bent-Over Row",
-      "Pull-ups",
-      "Dips"
-    ];
-
-    const DEFAULT_SCHEDULE = {
-      "Monday": ["Barbell Bench Press", "Incline Dumbbell Bench Press", "Dips"],
-      "Tuesday": ["Barbell Back Squat", "Leg Press"],
-      "Wednesday": ["Barbell Bent-Over Row", "Pull-ups"],
-      "Thursday": ["Overhead Shoulder Press", "Dips"],
-      "Friday": ["Barbell Deadlift", "Barbell Back Squat"],
-      "Saturday": [],
-      "Sunday": []
-    };
-
-    // State structure
-    let appData = JSON.parse(localStorage.getItem(STORAGE_KEY_PROFILES)) || {
-      activeUser: "User 1",
-      users: {
-        "User 1": {
-          workouts: [],
-          library: [...DEFAULT_LIBRARY],
-          schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE))
-        }
+    // Seed dummy history if none exists to test the "previous day" feature right away
+    function seedSampleData() {
+      if (!localStorage.getItem('workout_command_history')) {
+        const sampleHistory = [
+          {
+            date: "2024-01-10",
+            exercise: "Bench Press",
+            sets: [
+              { weight: 185, reps: 8 },
+              { weight: 195, reps: 6 },
+              { weight: 205, reps: 5 },
+              { weight: 205, reps: 4 }
+            ]
+          }
+        ];
+        localStorage.setItem('workout_command_history', JSON.stringify(sampleHistory));
       }
-    };
-
-    // Migration from older single-user versions if present
-    const legacyWorkouts = localStorage.getItem('workout_records_archive_v2');
-    if (legacyWorkouts && !localStorage.getItem(STORAGE_KEY_PROFILES)) {
-      try {
-        appData.users["User 1"].workouts = JSON.parse(legacyWorkouts) || [];
-        const legacyLib = localStorage.getItem('workout_library_v2');
-        if (legacyLib) appData.users["User 1"].library = JSON.parse(legacyLib);
-        const legacySched = localStorage.getItem('workout_weekly_schedule_v2');
-        if (legacySched) appData.users["User 1"].schedule = JSON.parse(legacySched);
-        saveAppData();
-      } catch (e) {}
     }
 
-    let currentLastRecordedSession = null;
-
-    function saveAppData() {
-      localStorage.setItem(STORAGE_KEY_PROFILES, JSON.stringify(appData));
+    function getAllHistory() {
+      return JSON.parse(localStorage.getItem('workout_command_history') || '[]');
     }
 
-    function getActiveUserData() {
-      if (!appData.users[appData.activeUser]) {
-        appData.users[appData.activeUser] = {
-          workouts: [],
-          library: [...DEFAULT_LIBRARY],
-          schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE))
-        };
-        saveAppData();
-      }
-      return appData.users[appData.activeUser];
+    function saveAllHistory(history) {
+      localStorage.setItem('workout_command_history', JSON.stringify(history));
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('workout-date').value = new Date().toISOString().split('T')[0];
-      populateUserDropdown();
-      refreshUserViews();
+    const exerciseSelect = document.getElementById('exerciseSelect');
+    const weightInput = document.getElementById('weightInput');
+    const repsInput = document.getElementById('repsInput');
+    const historyDate = document.getElementById('historyDate');
+    const historyList = document.getElementById('historyList');
+    const todayTableBody = document.getElementById('todaySetsTableBody');
+    const currentDateDisplay = document.getElementById('currentDateDisplay');
+
+    // Display current date in header
+    currentDateDisplay.textContent = new Date().toLocaleDateString(undefined, {
+      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
     });
 
-    function populateUserDropdown() {
-      const select = document.getElementById('active-user-select');
-      select.innerHTML = '';
-      Object.keys(appData.users).forEach(u => {
-        const opt = document.createElement('option');
-        opt.value = u;
-        opt.textContent = u;
-        if (u === appData.activeUser) opt.selected = true;
-        select.appendChild(opt);
-      });
-      document.querySelectorAll('.current-user-display').forEach(el => el.textContent = appData.activeUser);
-    }
+    // Load and show the last 3 sets from a previous day (excludes today)
+    function renderPreviousSessionSets(exerciseName) {
+      const today = getTodayString();
+      const allHistory = getAllHistory();
 
-    function promptNewUser() {
-      const name = prompt("Enter new user/athlete name:");
-      if (!name) return;
-      const cleanName = name.trim();
-      if (!cleanName) return;
+      // Find sessions for this exercise on dates strictly PRIOR to today
+      const pastSessions = allHistory
+        .filter(entry => entry.exercise === exerciseName && entry.date < today && entry.sets && entry.sets.length > 0)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
 
-      if (appData.users[cleanName]) {
-        alert("A profile with that name already exists.");
-        changeUser(cleanName);
+      historyList.innerHTML = '';
+
+      if (pastSessions.length === 0) {
+        historyDate.textContent = 'None';
+        historyList.innerHTML = '<span class="no-history">No past session records found.</span>';
         return;
       }
 
-      appData.users[cleanName] = {
-        workouts: [],
-        library: [...DEFAULT_LIBRARY],
-        schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE))
-      };
-      appData.activeUser = cleanName;
-      saveAppData();
-      populateUserDropdown();
-      refreshUserViews();
-    }
+      const mostRecentSession = pastSessions[0];
+      historyDate.textContent = mostRecentSession.date;
 
-    function changeUser(userName) {
-      appData.activeUser = userName;
-      saveAppData();
-      populateUserDropdown();
-      refreshUserViews();
-    }
+      // Slice the last 3 sets of that workout
+      const lastThreeSets = mostRecentSession.sets.slice(-3);
 
-    function refreshUserViews() {
-      syncLibraryUI();
-      renderWeeklySchedule();
-      updateScheduledDay();
-      resetToFourSets();
-      document.getElementById('exercise-name').value = '';
-      document.getElementById('last-perf-box').style.display = 'none';
-      currentLastRecordedSession = null;
-      renderHistory();
-    }
-
-    function resetToFourSets() {
-      const wrapper = document.getElementById('sets-wrapper');
-      wrapper.innerHTML = '';
-      for (let i = 0; i < 4; i++) {
-        addSetRow();
-      }
-      applyHistoricalBadges();
-    }
-
-    function switchTab(tab) {
-      const views = {
-        log: document.getElementById('view-log'),
-        schedule: document.getElementById('view-schedule'),
-        history: document.getElementById('view-history')
-      };
-      const tabs = {
-        log: document.getElementById('tab-log'),
-        schedule: document.getElementById('tab-schedule'),
-        history: document.getElementById('tab-history')
-      };
-
-      Object.keys(views).forEach(k => {
-        views[k].style.display = (k === tab) ? (k === 'log' || k === 'schedule' ? 'flex' : 'block') : 'none';
-        tabs[k].classList.toggle('active', k === tab);
-      });
-
-      if (tab === 'history') renderHistory();
-      if (tab === 'log') updateScheduledDay();
-    }
-
-    /* -----------------------------
-       LIBRARY & SCHEDULE PER USER
-    ------------------------------ */
-    function syncLibraryUI() {
-      const uData = getActiveUserData();
-      const datalist = document.getElementById('exercise-datalist');
-      datalist.innerHTML = '';
-      const allKnown = [...new Set([...uData.library, ...uData.workouts.map(e => e.exercise.trim())])].sort();
-      allKnown.forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        datalist.appendChild(opt);
-      });
-
-      const select = document.getElementById('schedule-exercise-select');
-      select.innerHTML = '';
-      uData.library.sort().forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        opt.textContent = name;
-        select.appendChild(opt);
-      });
-
-      const chipContainer = document.getElementById('library-chip-container');
-      chipContainer.innerHTML = '';
-      uData.library.forEach(name => {
-        const chip = document.createElement('span');
-        chip.className = 'exercise-chip';
-        chip.innerHTML = `${name} <span class="chip-delete" onclick="removeLibraryExercise('${name.replace(/'/g, "\\'")}')">&times;</span>`;
-        chipContainer.appendChild(chip);
-      });
-    }
-
-    function addLibraryExercise() {
-      const uData = getActiveUserData();
-      const input = document.getElementById('new-library-exercise');
-      const val = input.value.trim();
-      if (!val) return;
-      if (!uData.library.includes(val)) {
-        uData.library.push(val);
-        saveAppData();
-        syncLibraryUI();
-      }
-      input.value = '';
-    }
-
-    function removeLibraryExercise(name) {
-      const uData = getActiveUserData();
-      if (confirm(`Remove "${name}" from ${appData.activeUser}'s library?`)) {
-        uData.library = uData.library.filter(e => e !== name);
-        Object.keys(uData.schedule).forEach(day => {
-          uData.schedule[day] = uData.schedule[day].filter(e => e !== name);
-        });
-        saveAppData();
-        syncLibraryUI();
-        renderWeeklySchedule();
-        updateScheduledDay();
-      }
-    }
-
-    function assignExerciseToDay() {
-      const uData = getActiveUserData();
-      const day = document.getElementById('schedule-day-select').value;
-      const exercise = document.getElementById('schedule-exercise-select').value;
-
-      if (!exercise) {
-        alert('Please add exercises to your library first.');
-        return;
-      }
-
-      if (!uData.schedule[day]) uData.schedule[day] = [];
-
-      if (uData.schedule[day].includes(exercise)) {
-        alert(`${exercise} is already scheduled for ${day}.`);
-        return;
-      }
-
-      uData.schedule[day].push(exercise);
-      saveAppData();
-      renderWeeklySchedule();
-      updateScheduledDay();
-    }
-
-    function removeExerciseFromDay(day, exercise) {
-      const uData = getActiveUserData();
-      uData.schedule[day] = uData.schedule[day].filter(e => e !== exercise);
-      saveAppData();
-      renderWeeklySchedule();
-      updateScheduledDay();
-    }
-
-    function renderWeeklySchedule() {
-      const uData = getActiveUserData();
-      const container = document.getElementById('days-schedule-container');
-      container.innerHTML = '';
-
-      const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-      orderedDays.forEach(day => {
-        const block = document.createElement('div');
-        block.className = 'day-block';
-
-        const exercises = uData.schedule[day] || [];
-        let chipsHtml = exercises.map(ex => `
-          <span class="exercise-chip">
-            ${ex}
-            <span class="chip-delete" onclick="removeExerciseFromDay('${day}', '${ex.replace(/'/g, "\\'")}')">&times;</span>
-          </span>
-        `).join('');
-
-        if (exercises.length === 0) {
-          chipsHtml = `<span style="font-size:0.8rem; color:var(--text-muted);">No exercises scheduled. Rest or open day.</span>`;
-        }
-
-        block.innerHTML = `
-          <div class="day-title">
-            <span>${day}</span>
-            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">${exercises.length} Exercises</span>
-          </div>
-          <div>${chipsHtml}</div>
+      lastThreeSets.forEach((set, idx) => {
+        const pill = document.createElement('div');
+        pill.className = 'history-pill';
+        pill.innerHTML = `
+          <span class="set-tag">Set ${mostRecentSession.sets.length - lastThreeSets.length + idx + 1}:</span>
+          <strong>${set.weight}</strong> × <strong>${set.reps}</strong>
         `;
-        container.appendChild(block);
+        historyList.appendChild(pill);
       });
     }
 
-    /* -----------------------------
-       TRACKING & RECALL PER USER
-    ------------------------------ */
-    function getSelectedDayName() {
-      const dateVal = document.getElementById('workout-date').value;
-      if (!dateVal) return DAYS_OF_WEEK[new Date().getDay()];
-      const parts = dateVal.split('-');
-      const d = new Date(parts[0], parts[1] - 1, parts[2]);
-      return DAYS_OF_WEEK[d.getDay()];
-    }
+    // Render today's sets
+    function renderTodaySets(exerciseName) {
+      const today = getTodayString();
+      const allHistory = getAllHistory();
+      const todaySession = allHistory.find(h => h.date === today && h.exercise === exerciseName);
 
-    function updateScheduledDay() {
-      const uData = getActiveUserData();
-      const dayName = getSelectedDayName();
-      document.getElementById('current-day-label').textContent = dayName;
+      todayTableBody.innerHTML = '';
 
-      const scheduled = uData.schedule[dayName] || [];
-      const summaryElem = document.getElementById('routine-summary-text');
-
-      if (scheduled.length > 0) {
-        summaryElem.textContent = scheduled.join(", ");
-      } else {
-        summaryElem.textContent = "No specific routine set for this day.";
-      }
-    }
-
-    function selectFromDailyRoutine() {
-      const uData = getActiveUserData();
-      const dayName = getSelectedDayName();
-      const scheduled = uData.schedule[dayName] || [];
-
-      if (scheduled.length === 0) {
-        alert(`No recurring routine found for ${dayName}. Visit "Routines" to assign one.`);
+      if (!todaySession || todaySession.sets.length === 0) {
+        todayTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No sets recorded today.</td></tr>`;
         return;
       }
 
-      const exerciseInput = document.getElementById('exercise-name');
-      const currentIndex = scheduled.indexOf(exerciseInput.value);
-      const nextIndex = (currentIndex + 1) % scheduled.length;
-      exerciseInput.value = scheduled[nextIndex];
-      checkPreviousHistory();
-    }
-
-    function checkPreviousHistory() {
-      const uData = getActiveUserData();
-      const input = document.getElementById('exercise-name').value.trim().toLowerCase();
-      const perfBox = document.getElementById('last-perf-box');
-      const perfContent = document.getElementById('last-perf-content');
-      const perfTitle = document.getElementById('last-perf-title');
-
-      if (!input) {
-        perfBox.style.display = 'none';
-        currentLastRecordedSession = null;
-        applyHistoricalBadges();
-        return;
-      }
-
-      const matches = uData.workouts
-        .filter(entry => entry.exercise.trim().toLowerCase() === input)
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      if (matches.length > 0) {
-        currentLastRecordedSession = matches[0];
-        perfTitle.textContent = `Last Done (${appData.activeUser}): ${currentLastRecordedSession.date}`;
-        
-        let gridHtml = `<div class="last-perf-grid">`;
-        currentLastRecordedSession.sets.forEach((s, idx) => {
-          gridHtml += `
-            <div class="last-perf-chip">
-              <strong>Set ${idx + 1}:</strong> ${s.weight ? s.weight + ' lbs' : '0 lbs'} × ${s.reps} reps
-              ${s.comment ? `<div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">"${s.comment}"</div>` : ''}
-            </div>
-          `;
-        });
-        gridHtml += `</div>`;
-
-        perfContent.innerHTML = gridHtml;
-        perfBox.style.display = 'block';
-      } else {
-        currentLastRecordedSession = null;
-        perfBox.style.display = 'none';
-      }
-      applyHistoricalBadges();
-    }
-
-    function applyHistoricalBadges() {
-      const rows = document.querySelectorAll('#sets-wrapper .set-row');
-      rows.forEach((row, idx) => {
-        let badge = row.querySelector('.prev-lift-badge');
-        if (!badge) {
-          badge = document.createElement('span');
-          badge.className = 'prev-lift-badge';
-          row.querySelector('.set-header').appendChild(badge);
-        }
-
-        if (currentLastRecordedSession && currentLastRecordedSession.sets[idx]) {
-          const past = currentLastRecordedSession.sets[idx];
-          badge.textContent = `Last: ${past.weight} lbs × ${past.reps} reps`;
-          badge.style.display = 'inline-block';
-        } else {
-          badge.style.display = 'none';
-        }
-      });
-    }
-
-    function copyPreviousLifts() {
-      if (!currentLastRecordedSession) return;
-      const rows = document.querySelectorAll('#sets-wrapper .set-row');
-      
-      currentLastRecordedSession.sets.forEach((pastSet, idx) => {
-        if (rows[idx]) {
-          rows[idx].querySelector('.set-weight').value = pastSet.weight;
-          rows[idx].querySelector('.set-reps').value = pastSet.reps;
-        }
-      });
-    }
-
-    function addSetRow(weight = '', reps = '', notes = '') {
-      const container = document.getElementById('sets-wrapper');
-      const setIndex = container.children.length + 1;
-
-      const setDiv = document.createElement('div');
-      setDiv.className = 'set-row';
-      setDiv.innerHTML = `
-        <div class="set-header">
-          <span>Set ${setIndex}</span>
-          ${setIndex > 1 ? `<button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.set-row').remove(); renumberSets();">Remove</button>` : ''}
-        </div>
-        <div class="set-inputs">
-          <div style="flex: 1;">
-            <label style="margin-bottom:2px; font-size:0.75rem;">Pounds (lbs)</label>
-            <input type="number" step="any" class="set-weight" placeholder="e.g. 225" value="${weight}">
-          </div>
-          <div style="flex: 1;">
-            <label style="margin-bottom:2px; font-size:0.75rem;">Reps</label>
-            <input type="number" class="set-reps" placeholder="e.g. 8" value="${reps}">
-          </div>
-        </div>
-        <div>
-          <label style="margin-bottom:2px; font-size:0.75rem;">Set Note / Comment</label>
-          <input type="text" class="set-comment" placeholder="e.g. Smooth bar speed, paused 1 sec, RPE 8" value="${notes}">
-        </div>
-      `;
-      container.appendChild(setDiv);
-    }
-
-    function renumberSets() {
-      const container = document.getElementById('sets-wrapper');
-      Array.from(container.children).forEach((el, idx) => {
-        el.querySelector('.set-header span').textContent = `Set ${idx + 1}`;
-      });
-      applyHistoricalBadges();
-    }
-
-    function saveExerciseSession() {
-      const uData = getActiveUserData();
-      const date = document.getElementById('workout-date').value;
-      const exercise = document.getElementById('exercise-name').value.trim();
-
-      if (!date || !exercise) {
-        alert('Please specify both a date and exercise name.');
-        return;
-      }
-
-      const setRows = document.querySelectorAll('#sets-wrapper .set-row');
-      const sets = [];
-
-      setRows.forEach(row => {
-        const weight = row.querySelector('.set-weight').value;
-        const reps = row.querySelector('.set-reps').value;
-        const comment = row.querySelector('.set-comment').value.trim();
-
-        if (reps || weight) {
-          sets.push({
-            weight: weight || '0',
-            reps: reps || '0',
-            comment: comment
-          });
-        }
-      });
-
-      if (sets.length === 0) {
-        alert('Please record at least one completed set with weight or reps.');
-        return;
-      }
-
-      const entry = {
-        id: Date.now().toString(),
-        date: date,
-        exercise: exercise,
-        sets: sets
-      };
-
-      uData.workouts.unshift(entry);
-
-      if (!uData.library.includes(exercise)) {
-        uData.library.push(exercise);
-      }
-
-      saveAppData();
-
-      document.getElementById('exercise-name').value = '';
-      document.getElementById('last-perf-box').style.display = 'none';
-      currentLastRecordedSession = null;
-      resetToFourSets();
-      syncLibraryUI();
-
-      alert(`Session for "${exercise}" saved for ${appData.activeUser}!`);
-    }
-
-    /* -----------------------------
-       ARCHIVE & BACKUP
-    ------------------------------ */
-    function renderHistory() {
-      const uData = getActiveUserData();
-      const container = document.getElementById('history-container');
-      const filter = (document.getElementById('search-history').value || '').trim().toLowerCase();
-      container.innerHTML = '';
-
-      const filtered = uData.workouts.filter(item => 
-        !filter || item.exercise.toLowerCase().includes(filter)
-      );
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="empty-state">No archived sets found for ${appData.activeUser}.</div>`;
-        return;
-      }
-
-      filtered.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'history-card';
-
-        let setsHtml = item.sets.map((s, i) => `
-          <div class="history-set">
-            <div><strong>Set ${i + 1}:</strong> ${s.weight} lbs × ${s.reps} reps</div>
-            ${s.comment ? `<div class="history-comment">↳ Note: ${s.comment}</div>` : ''}
-          </div>
-        `).join('');
-
-        card.innerHTML = `
-          <div class="history-card-header">
-            <h3>${item.exercise}</h3>
-            <span class="history-date">${item.date}</span>
-          </div>
-          ${setsHtml}
+      todaySession.sets.forEach((set, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>Set ${index + 1}</td>
+          <td>${set.weight}</td>
+          <td>${set.reps}</td>
+          <td style="text-align: right;">
+            <button class="btn-delete" onclick="deleteSet(${index})">Remove</button>
+          </td>
         `;
-        container.appendChild(card);
+        todayTableBody.appendChild(tr);
       });
     }
 
-    function exportData() {
-      const fullPayload = {
-        appData: appData,
-        exportDate: new Date().toISOString()
-      };
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullPayload, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `all_athletes_workouts_${new Date().toISOString().split('T')[0]}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+    // Save set action
+    function saveSet() {
+      const weight = parseFloat(weightInput.value);
+      const reps = parseInt(repsInput.value, 10);
+      const exercise = exerciseSelect.value;
+      const today = getTodayString();
+
+      if (isNaN(weight) || isNaN(reps)) return;
+
+      const history = getAllHistory();
+      let session = history.find(entry => entry.date === today && entry.exercise === exercise);
+
+      if (!session) {
+        session = { date: today, exercise: exercise, sets: [] };
+        history.push(session);
+      }
+
+      session.sets.push({ weight, reps });
+      saveAllHistory(history);
+
+      // Refresh today's list
+      renderTodaySets(exercise);
+
+      // NOTE: We deliberately DO NOT reset weightInput.value or repsInput.value
+      // so your logged values stay visible and ready for the next set.
     }
 
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+    // Delete a logged set from today
+    function deleteSet(index) {
+      const today = getTodayString();
+      const exercise = exerciseSelect.value;
+      const history = getAllHistory();
+      const session = history.find(entry => entry.date === today && entry.exercise === exercise);
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (imported.appData && imported.appData.users) {
-            appData = imported.appData;
-          } else if (imported.workouts && imported.library && imported.schedule) {
-            // Legacy single-user import
-            appData = {
-              activeUser: "User 1",
-              users: {
-                "User 1": {
-                  workouts: imported.workouts,
-                  library: imported.library,
-                  schedule: imported.schedule
-                }
-              }
-            };
-          } else {
-            alert('Unrecognized backup structure.');
-            return;
-          }
-
-          saveAppData();
-          populateUserDropdown();
-          refreshUserViews();
-          alert('All profiles and records imported successfully!');
-        } catch (err) {
-          alert('Error parsing JSON backup file.');
-        }
-      };
-      reader.readAsText(file);
+      if (session) {
+        session.sets.splice(index, 1);
+        saveAllHistory(history);
+        renderTodaySets(exercise);
+      }
     }
+
+    // Switch exercise
+    exerciseSelect.addEventListener('change', () => {
+      const ex = exerciseSelect.value;
+      renderPreviousSessionSets(ex);
+      renderTodaySets(ex);
+    });
+
+    // Initialization
+    seedSampleData();
+    renderPreviousSessionSets(exerciseSelect.value);
+    renderTodaySets(exerciseSelect.value);
   </script>
 </body>
 </html>
