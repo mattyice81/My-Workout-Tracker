@@ -36,10 +36,10 @@
 
     .container {
       width: 100%;
-      max-width: 720px;
+      max-width: 760px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
     header {
@@ -55,7 +55,7 @@
     .header-left {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
 
     h1 {
@@ -64,9 +64,10 @@
       letter-spacing: -0.5px;
     }
 
-    .date-display {
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .user-select-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .card {
@@ -76,17 +77,33 @@
       padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 580px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
     }
 
     label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-muted);
       margin-bottom: 6px;
       display: block;
+    }
+
+    select, input, button {
+      font-family: inherit;
     }
 
     select, input {
@@ -96,7 +113,7 @@
       border: 1px solid var(--card-border);
       border-radius: 6px;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.95rem;
       outline: none;
       transition: border-color 0.2s;
     }
@@ -105,9 +122,24 @@
       border-color: var(--primary);
     }
 
-    /* History Reference Section (Previous Day Only) */
+    .btn-secondary {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+    }
+
+    /* Previous Day Reference Box */
     .history-card {
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.7);
       border: 1px dashed var(--card-border);
       border-radius: 8px;
       padding: 12px;
@@ -121,7 +153,7 @@
     }
 
     .history-title {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--primary);
       text-transform: uppercase;
@@ -134,7 +166,7 @@
 
     .history-list {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -160,13 +192,6 @@
       font-style: italic;
     }
 
-    /* Logging Inputs */
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
     .btn-save {
       background: var(--accent);
       color: #052e16;
@@ -176,15 +201,15 @@
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.2s;
       width: 100%;
+      margin-top: 4px;
+      transition: background 0.2s;
     }
 
     .btn-save:hover {
       background: var(--accent-hover);
     }
 
-    /* Today's Sets Logged */
     .logged-table {
       width: 100%;
       border-collapse: collapse;
@@ -214,6 +239,12 @@
       font-weight: bold;
       font-size: 0.8rem;
     }
+
+    .workout-controls {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
   </style>
 </head>
 <body>
@@ -221,37 +252,63 @@
     <header>
       <div class="header-left">
         <h1>Workout Command</h1>
-        <span class="date-display" id="currentDateDisplay"></span>
+      </div>
+      <div class="user-select-bar">
+        <label for="userSelect" style="margin-bottom:0;">User:</label>
+        <select id="userSelect" style="width: auto; padding: 6px 10px;"></select>
+        <button class="btn-secondary" type="button" onclick="promptNewUser()">+ New</button>
       </div>
     </header>
 
-    <!-- Main Workout Entry Card -->
+    <!-- Workout Session Settings -->
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <label for="sessionDate">Workout Date</label>
+          <input type="date" id="sessionDate" />
+        </div>
+        <div>
+          <label for="workoutSelect">Workout Session</label>
+          <div class="workout-controls">
+            <select id="workoutSelect"></select>
+            <button class="btn-secondary" type="button" onclick="promptNewWorkout()">+ New</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Exercise Logging -->
     <div class="card">
       <div>
         <label for="exerciseSelect">Exercise</label>
         <select id="exerciseSelect">
           <option value="Bench Press">Bench Press</option>
+          <option value="Incline Dumbbell Press">Incline Dumbbell Press</option>
           <option value="Barbell Squat">Barbell Squat</option>
+          <option value="Leg Press">Leg Press</option>
           <option value="Deadlift">Deadlift</option>
+          <option value="Romanian Deadlift">Romanian Deadlift</option>
           <option value="Overhead Press">Overhead Press</option>
+          <option value="Lat Pulldown">Lat Pulldown</option>
+          <option value="Barbell Row">Barbell Row</option>
           <option value="Pull-ups">Pull-ups</option>
         </select>
       </div>
 
-      <!-- Reference: Prior Workout Last 3 Sets -->
+      <!-- Prior Day's Sets Reference -->
       <div class="history-card">
         <div class="history-header">
-          <span class="history-title">Last Session (Previous Day)</span>
+          <span class="history-title">Prior Day's Last 3 Sets</span>
           <span class="history-date" id="historyDate">-</span>
         </div>
         <div class="history-list" id="historyList">
-          <span class="no-history">No previous sessions found.</span>
+          <span class="no-history">No prior sessions found.</span>
         </div>
       </div>
 
-      <!-- Set Logging Inputs -->
+      <!-- Set Inputs -->
       <form id="setForm" onsubmit="event.preventDefault(); saveSet();">
-        <div class="input-grid">
+        <div class="grid-2">
           <div>
             <label for="weightInput">Weight (lbs/kg)</label>
             <input type="number" id="weightInput" step="any" required placeholder="e.g. 185" />
@@ -262,13 +319,13 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-save" style="margin-top: 14px;">Save Set</button>
+        <button type="submit" class="btn-save">Save Set</button>
       </form>
     </div>
 
-    <!-- Today's Logged Sets for current exercise -->
+    <!-- Today's / Current Selected Date's Logged Sets -->
     <div class="card">
-      <h2 style="font-size: 1.1rem; font-weight: 600;">Today's Completed Sets</h2>
+      <h2 style="font-size: 1.05rem; font-weight: 600;" id="tableHeaderTitle">Sets Completed Today</h2>
       <table class="logged-table">
         <thead>
           <tr>
@@ -278,69 +335,172 @@
             <th style="text-align: right;">Action</th>
           </tr>
         </thead>
-        <tbody id="todaySetsTableBody">
-          <!-- Rows will be injected dynamically -->
+        <tbody id="currentSetsTableBody">
+          <!-- Populated dynamically -->
         </tbody>
       </table>
     </div>
   </div>
 
   <script>
-    // Local date string in YYYY-MM-DD format
-    function getTodayString() {
-      const now = new Date();
-      return now.toISOString().split('T')[0];
-    }
+    const STORAGE_KEY = 'workout_command_state_v2';
 
-    // Seed dummy history if none exists to test the "previous day" feature right away
-    function seedSampleData() {
-      if (!localStorage.getItem('workout_command_history')) {
-        const sampleHistory = [
-          {
-            date: "2024-01-10",
-            exercise: "Bench Press",
-            sets: [
-              { weight: 185, reps: 8 },
-              { weight: 195, reps: 6 },
-              { weight: 205, reps: 5 },
-              { weight: 205, reps: 4 }
-            ]
-          }
-        ];
-        localStorage.setItem('workout_command_history', JSON.stringify(sampleHistory));
+    // Default structure template
+    const defaultData = {
+      users: ['Alex', 'Sam'],
+      activeUser: 'Alex',
+      // Store workouts: array of { id, userId, date, workoutName, exercise, sets: [{weight, reps}] }
+      entries: [
+        {
+          id: '1',
+          userId: 'Alex',
+          date: '2024-01-10',
+          workoutName: 'Upper Body A',
+          exercise: 'Bench Press',
+          sets: [
+            { weight: 175, reps: 10 },
+            { weight: 185, reps: 8 },
+            { weight: 195, reps: 6 },
+            { weight: 205, reps: 5 }
+          ]
+        },
+        {
+          id: '2',
+          userId: 'Alex',
+          date: '2024-01-10',
+          workoutName: 'Upper Body A',
+          exercise: 'Overhead Press',
+          sets: [
+            { weight: 95, reps: 10 },
+            { weight: 115, reps: 8 },
+            { weight: 125, reps: 6 }
+          ]
+        }
+      ],
+      // Quick workout templates per user
+      userWorkouts: {
+        'Alex': ['Push Day', 'Pull Day', 'Leg Day'],
+        'Sam': ['Full Body A', 'Full Body B']
       }
+    };
+
+    function loadAppState() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+        return defaultData;
+      }
+      return JSON.parse(stored);
     }
 
-    function getAllHistory() {
-      return JSON.parse(localStorage.getItem('workout_command_history') || '[]');
+    function saveAppState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
-    function saveAllHistory(history) {
-      localStorage.setItem('workout_command_history', JSON.stringify(history));
-    }
-
+    // Elements
+    const userSelect = document.getElementById('userSelect');
+    const sessionDate = document.getElementById('sessionDate');
+    const workoutSelect = document.getElementById('workoutSelect');
     const exerciseSelect = document.getElementById('exerciseSelect');
     const weightInput = document.getElementById('weightInput');
     const repsInput = document.getElementById('repsInput');
     const historyDate = document.getElementById('historyDate');
     const historyList = document.getElementById('historyList');
-    const todayTableBody = document.getElementById('todaySetsTableBody');
-    const currentDateDisplay = document.getElementById('currentDateDisplay');
+    const currentSetsTableBody = document.getElementById('currentSetsTableBody');
+    const tableHeaderTitle = document.getElementById('tableHeaderTitle');
 
-    // Display current date in header
-    currentDateDisplay.textContent = new Date().toLocaleDateString(undefined, {
-      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
-    });
+    // Return today formatted YYYY-MM-DD
+    function getTodayString() {
+      return new Date().toISOString().split('T')[0];
+    }
 
-    // Load and show the last 3 sets from a previous day (excludes today)
-    function renderPreviousSessionSets(exerciseName) {
-      const today = getTodayString();
-      const allHistory = getAllHistory();
+    function init() {
+      const state = loadAppState();
 
-      // Find sessions for this exercise on dates strictly PRIOR to today
-      const pastSessions = allHistory
-        .filter(entry => entry.exercise === exerciseName && entry.date < today && entry.sets && entry.sets.length > 0)
-        .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
+      // Set today's date picker
+      sessionDate.value = getTodayString();
+
+      // Populate users
+      renderUserOptions(state);
+
+      // Populate workouts for active user
+      renderWorkoutOptions(state);
+
+      // Render sets and past reference
+      refreshDisplay();
+    }
+
+    function renderUserOptions(state) {
+      userSelect.innerHTML = '';
+      state.users.forEach(user => {
+        const opt = document.createElement('option');
+        opt.value = user;
+        opt.textContent = user;
+        if (user === state.activeUser) opt.selected = true;
+        userSelect.appendChild(opt);
+      });
+    }
+
+    function renderWorkoutOptions(state) {
+      workoutSelect.innerHTML = '';
+      const list = state.userWorkouts[state.activeUser] || ['General Workout'];
+      list.forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = w;
+        workoutSelect.appendChild(opt);
+      });
+    }
+
+    function promptNewUser() {
+      const name = prompt("Enter new user name:");
+      if (!name || !name.trim()) return;
+      const cleanName = name.trim();
+      const state = loadAppState();
+
+      if (!state.users.includes(cleanName)) {
+        state.users.push(cleanName);
+        state.userWorkouts[cleanName] = ['Full Body', 'Upper Body', 'Lower Body'];
+      }
+      state.activeUser = cleanName;
+      saveAppState(state);
+
+      renderUserOptions(state);
+      renderWorkoutOptions(state);
+      refreshDisplay();
+    }
+
+    function promptNewWorkout() {
+      const name = prompt("Enter workout name (e.g. Leg Day, Chest & Tri):");
+      if (!name || !name.trim()) return;
+      const cleanName = name.trim();
+      const state = loadAppState();
+
+      if (!state.userWorkouts[state.activeUser]) {
+        state.userWorkouts[state.activeUser] = [];
+      }
+
+      if (!state.userWorkouts[state.activeUser].includes(cleanName)) {
+        state.userWorkouts[state.activeUser].push(cleanName);
+        saveAppState(state);
+      }
+
+      renderWorkoutOptions(state);
+      workoutSelect.value = cleanName;
+      refreshDisplay();
+    }
+
+    // Lookup previous day's last 3 sets (STRICTLY before the selected date)
+    function renderPriorDayHistory() {
+      const state = loadAppState();
+      const user = state.activeUser;
+      const currentDate = sessionDate.value;
+      const exercise = exerciseSelect.value;
+
+      // Find sessions for this user & exercise where date < selected date
+      const pastSessions = state.entries
+        .filter(e => e.userId === user && e.exercise === exercise && e.date < currentDate && e.sets && e.sets.length > 0)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest past day first
 
       historyList.innerHTML = '';
 
@@ -351,36 +511,48 @@
       }
 
       const mostRecentSession = pastSessions[0];
-      historyDate.textContent = mostRecentSession.date;
+      historyDate.textContent = `${mostRecentSession.date} (${mostRecentSession.workoutName || 'Workout'})`;
 
-      // Slice the last 3 sets of that workout
+      // Grab the last 3 sets from that session
       const lastThreeSets = mostRecentSession.sets.slice(-3);
+      const startSetIdx = mostRecentSession.sets.length - lastThreeSets.length;
 
       lastThreeSets.forEach((set, idx) => {
         const pill = document.createElement('div');
         pill.className = 'history-pill';
         pill.innerHTML = `
-          <span class="set-tag">Set ${mostRecentSession.sets.length - lastThreeSets.length + idx + 1}:</span>
+          <span class="set-tag">Set ${startSetIdx + idx + 1}:</span>
           <strong>${set.weight}</strong> × <strong>${set.reps}</strong>
         `;
         historyList.appendChild(pill);
       });
     }
 
-    // Render today's sets
-    function renderTodaySets(exerciseName) {
-      const today = getTodayString();
-      const allHistory = getAllHistory();
-      const todaySession = allHistory.find(h => h.date === today && h.exercise === exerciseName);
+    // Render sets performed on the currently selected workout day
+    function renderCurrentDaySets() {
+      const state = loadAppState();
+      const user = state.activeUser;
+      const date = sessionDate.value;
+      const workoutName = workoutSelect.value;
+      const exercise = exerciseSelect.value;
 
-      todayTableBody.innerHTML = '';
+      tableHeaderTitle.textContent = `Sets on ${date} (${exercise})`;
 
-      if (!todaySession || todaySession.sets.length === 0) {
-        todayTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No sets recorded today.</td></tr>`;
+      const entry = state.entries.find(e => 
+        e.userId === user && 
+        e.date === date && 
+        e.workoutName === workoutName && 
+        e.exercise === exercise
+      );
+
+      currentSetsTableBody.innerHTML = '';
+
+      if (!entry || !entry.sets || entry.sets.length === 0) {
+        currentSetsTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No sets logged yet for this session.</td></tr>`;
         return;
       }
 
-      todaySession.sets.forEach((set, index) => {
+      entry.sets.forEach((set, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>Set ${index + 1}</td>
@@ -390,62 +562,91 @@
             <button class="btn-delete" onclick="deleteSet(${index})">Remove</button>
           </td>
         `;
-        todayTableBody.appendChild(tr);
+        currentSetsTableBody.appendChild(tr);
       });
     }
 
-    // Save set action
+    // Save set & keep inputs populated
     function saveSet() {
       const weight = parseFloat(weightInput.value);
       const reps = parseInt(repsInput.value, 10);
-      const exercise = exerciseSelect.value;
-      const today = getTodayString();
-
       if (isNaN(weight) || isNaN(reps)) return;
 
-      const history = getAllHistory();
-      let session = history.find(entry => entry.date === today && entry.exercise === exercise);
-
-      if (!session) {
-        session = { date: today, exercise: exercise, sets: [] };
-        history.push(session);
-      }
-
-      session.sets.push({ weight, reps });
-      saveAllHistory(history);
-
-      // Refresh today's list
-      renderTodaySets(exercise);
-
-      // NOTE: We deliberately DO NOT reset weightInput.value or repsInput.value
-      // so your logged values stay visible and ready for the next set.
-    }
-
-    // Delete a logged set from today
-    function deleteSet(index) {
-      const today = getTodayString();
+      const state = loadAppState();
+      const user = state.activeUser;
+      const date = sessionDate.value;
+      const workoutName = workoutSelect.value;
       const exercise = exerciseSelect.value;
-      const history = getAllHistory();
-      const session = history.find(entry => entry.date === today && entry.exercise === exercise);
 
-      if (session) {
-        session.sets.splice(index, 1);
-        saveAllHistory(history);
-        renderTodaySets(exercise);
+      let entry = state.entries.find(e => 
+        e.userId === user && 
+        e.date === date && 
+        e.workoutName === workoutName && 
+        e.exercise === exercise
+      );
+
+      if (!entry) {
+        entry = {
+          id: Date.now().toString(),
+          userId: user,
+          date: date,
+          workoutName: workoutName,
+          exercise: exercise,
+          sets: []
+        };
+        state.entries.push(entry);
+      }
+
+      entry.sets.push({ weight, reps });
+      saveAppState(state);
+
+      // Re-render the sets table
+      renderCurrentDaySets();
+
+      // Note: We intentionally do NOT clear weightInput and repsInput so your values remain in the UI
+    }
+
+    function deleteSet(index) {
+      const state = loadAppState();
+      const user = state.activeUser;
+      const date = sessionDate.value;
+      const workoutName = workoutSelect.value;
+      const exercise = exerciseSelect.value;
+
+      const entry = state.entries.find(e => 
+        e.userId === user && 
+        e.date === date && 
+        e.workoutName === workoutName && 
+        e.exercise === exercise
+      );
+
+      if (entry && entry.sets) {
+        entry.sets.splice(index, 1);
+        saveAppState(state);
+        renderCurrentDaySets();
       }
     }
 
-    // Switch exercise
-    exerciseSelect.addEventListener('change', () => {
-      const ex = exerciseSelect.value;
-      renderPreviousSessionSets(ex);
-      renderTodaySets(ex);
+    function refreshDisplay() {
+      renderPriorDayHistory();
+      renderCurrentDaySets();
+    }
+
+    // Event listeners
+    userSelect.addEventListener('change', () => {
+      const state = loadAppState();
+      state.activeUser = userSelect.value;
+      saveAppState(state);
+      renderWorkoutOptions(state);
+      refreshDisplay();
     });
 
-    // Initialization
-    seedSampleData();
-    renderPreviousSessionSets(exerciseSelect.value);
-    renderTodaySets(exerciseSelect.value);
+    workoutSelect.addEventListener('change', refreshDisplay);
+    exerciseSelect.addEventListener('change', refreshDisplay);
+    sessionDate.addEventListener('change', refreshDisplay);
+
+    // Run setup
+    init();
   </script>
 </body>
 </html>
