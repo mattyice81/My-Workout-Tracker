@@ -23,7 +23,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
@@ -42,34 +42,6 @@
       gap: 16px;
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .user-select-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .card {
       background-color: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -80,16 +52,25 @@
       gap: 14px;
     }
 
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+      margin-bottom: 2px;
+    }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
-    @media (max-width: 580px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
+    .flex-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
     label {
@@ -98,7 +79,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       display: block;
     }
 
@@ -108,36 +89,76 @@
 
     select, input {
       width: 100%;
-      padding: 10px 12px;
+      padding: 9px 12px;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       border-radius: 6px;
       color: var(--text);
       font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s;
     }
 
     select:focus, input:focus {
       border-color: var(--primary);
     }
 
+    .btn {
+      padding: 9px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .btn-primary { background: var(--primary); color: #082f49; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
     .btn-secondary {
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       color: var(--text);
-      padding: 9px 12px;
+    }
+    .btn-secondary:hover { border-color: var(--primary); }
+
+    .btn-success {
+      background: var(--accent);
+      color: #052e16;
+      width: 100%;
+      padding: 12px;
+    }
+    .btn-success:hover { background: var(--accent-hover); }
+
+    /* Builder tags */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 38px;
+      padding: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
       border-radius: 6px;
-      cursor: pointer;
+    }
+
+    .tag {
+      background: #334155;
+      padding: 4px 8px;
+      border-radius: 4px;
       font-size: 0.85rem;
-      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .btn-secondary:hover {
-      border-color: var(--primary);
+    .tag-remove {
+      color: var(--accent-danger);
+      cursor: pointer;
+      font-weight: bold;
     }
 
-    /* Previous Day Reference Box */
+    /* Reference Card */
     .history-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px dashed var(--card-border);
@@ -148,20 +169,10 @@
     .history-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       margin-bottom: 8px;
-    }
-
-    .history-title {
       font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--primary);
       text-transform: uppercase;
-    }
-
-    .history-date {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+      font-weight: 700;
     }
 
     .history-list {
@@ -176,45 +187,13 @@
       border-radius: 6px;
       padding: 6px 10px;
       font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .history-pill .set-tag {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-    }
-
-    .no-history {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .btn-save {
-      background: var(--accent);
-      color: #052e16;
-      border: none;
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 4px;
-      transition: background 0.2s;
-    }
-
-    .btn-save:hover {
-      background: var(--accent-hover);
-    }
-
+    /* Table */
     .logged-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9rem;
-      margin-top: 4px;
     }
 
     .logged-table th {
@@ -227,7 +206,7 @@
     }
 
     .logged-table td {
-      padding: 10px 8px;
+      padding: 8px;
       border-bottom: 1px solid rgba(51, 65, 85, 0.4);
     }
 
@@ -236,416 +215,404 @@
       border: none;
       color: var(--accent-danger);
       cursor: pointer;
-      font-weight: bold;
       font-size: 0.8rem;
-    }
-
-    .workout-controls {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <div class="header-left">
-        <h1>Workout Command</h1>
-      </div>
-      <div class="user-select-bar">
-        <label for="userSelect" style="margin-bottom:0;">User:</label>
-        <select id="userSelect" style="width: auto; padding: 6px 10px;"></select>
-        <button class="btn-secondary" type="button" onclick="promptNewUser()">+ New</button>
-      </div>
-    </header>
 
-    <!-- Workout Session Settings -->
+    <!-- 1. User & Day Setup -->
     <div class="card">
+      <div class="card-title">1. Profile & Date</div>
       <div class="grid-2">
         <div>
-          <label for="sessionDate">Workout Date</label>
-          <input type="date" id="sessionDate" />
+          <label>Active User</label>
+          <div class="flex-row">
+            <select id="userSelect"></select>
+            <button class="btn btn-secondary" onclick="addNewUser()">+ User</button>
+          </div>
         </div>
         <div>
-          <label for="workoutSelect">Workout Session</label>
-          <div class="workout-controls">
-            <select id="workoutSelect"></select>
-            <button class="btn-secondary" type="button" onclick="promptNewWorkout()">+ New</button>
-          </div>
+          <label>Workout Date</label>
+          <input type="date" id="targetDate" />
         </div>
       </div>
     </div>
 
-    <!-- Active Exercise Logging -->
+    <!-- 2. Daily Workout Builder -->
     <div class="card">
+      <div class="card-title">2. Build Today's Workout</div>
+      <div class="grid-2">
+        <div>
+          <label>Workout Name</label>
+          <input type="text" id="workoutNameInput" placeholder="e.g. Chest & Triceps" />
+        </div>
+        <div>
+          <label>Add Exercise to Workout</label>
+          <div class="flex-row">
+            <input type="text" id="addExerciseInput" list="commonExercises" placeholder="Type or select exercise" />
+            <datalist id="commonExercises">
+              <option value="Bench Press"></option>
+              <option value="Incline DB Press"></option>
+              <option value="Squat"></option>
+              <option value="Romanian Deadlift"></option>
+              <option value="Lat Pulldown"></option>
+              <option value="Barbell Row"></option>
+              <option value="Overhead Press"></option>
+              <option value="Bicep Curl"></option>
+              <option value="Tricep Pushdown"></option>
+            </datalist>
+            <button class="btn btn-primary" onclick="addExerciseToRoutine()">Add</button>
+          </div>
+        </div>
+      </div>
       <div>
-        <label for="exerciseSelect">Exercise</label>
-        <select id="exerciseSelect">
-          <option value="Bench Press">Bench Press</option>
-          <option value="Incline Dumbbell Press">Incline Dumbbell Press</option>
-          <option value="Barbell Squat">Barbell Squat</option>
-          <option value="Leg Press">Leg Press</option>
-          <option value="Deadlift">Deadlift</option>
-          <option value="Romanian Deadlift">Romanian Deadlift</option>
-          <option value="Overhead Press">Overhead Press</option>
-          <option value="Lat Pulldown">Lat Pulldown</option>
-          <option value="Barbell Row">Barbell Row</option>
-          <option value="Pull-ups">Pull-ups</option>
-        </select>
+        <label>Selected Routine for this Date</label>
+        <div class="tag-container" id="routineTags"></div>
+      </div>
+    </div>
+
+    <!-- 3. Logging Area -->
+    <div class="card">
+      <div class="card-title">3. Log Sets</div>
+      <div>
+        <label>Current Exercise</label>
+        <select id="activeExerciseSelect"></select>
       </div>
 
-      <!-- Prior Day's Sets Reference -->
+      <!-- Prior Day Reference (Stops at Yesterday) -->
       <div class="history-card">
         <div class="history-header">
-          <span class="history-title">Prior Day's Last 3 Sets</span>
-          <span class="history-date" id="historyDate">-</span>
+          <span style="color: var(--primary);">Prior Session (Previous Day)</span>
+          <span style="color: var(--text-muted);" id="historyDateLabel">-</span>
         </div>
-        <div class="history-list" id="historyList">
-          <span class="no-history">No prior sessions found.</span>
+        <div class="history-list" id="historySetsContainer">
+          <span style="color: var(--text-muted); font-size:0.85rem;">No prior session found.</span>
         </div>
       </div>
 
-      <!-- Set Inputs -->
-      <form id="setForm" onsubmit="event.preventDefault(); saveSet();">
+      <!-- Input Form -->
+      <form onsubmit="event.preventDefault(); saveActiveSet();">
         <div class="grid-2">
           <div>
-            <label for="weightInput">Weight (lbs/kg)</label>
-            <input type="number" id="weightInput" step="any" required placeholder="e.g. 185" />
+            <label>Weight (lbs/kg)</label>
+            <input type="number" id="weightInput" step="any" required placeholder="185" />
           </div>
           <div>
-            <label for="repsInput">Reps</label>
-            <input type="number" id="repsInput" step="1" required placeholder="e.g. 8" />
+            <label>Reps</label>
+            <input type="number" id="repsInput" step="1" required placeholder="8" />
           </div>
         </div>
-
-        <button type="submit" class="btn-save">Save Set</button>
+        <button type="submit" class="btn btn-success" style="margin-top: 12px;">Save Set</button>
       </form>
     </div>
 
-    <!-- Today's / Current Selected Date's Logged Sets -->
+    <!-- 4. Today's Completed Sets Table -->
     <div class="card">
-      <h2 style="font-size: 1.05rem; font-weight: 600;" id="tableHeaderTitle">Sets Completed Today</h2>
+      <div class="card-title" id="todayLogTitle">Sets Completed on Selected Date</div>
       <table class="logged-table">
         <thead>
           <tr>
             <th>Set</th>
+            <th>Exercise</th>
             <th>Weight</th>
             <th>Reps</th>
             <th style="text-align: right;">Action</th>
           </tr>
         </thead>
-        <tbody id="currentSetsTableBody">
-          <!-- Populated dynamically -->
-        </tbody>
+        <tbody id="completedSetsBody"></tbody>
       </table>
     </div>
+
   </div>
 
   <script>
-    const STORAGE_KEY = 'workout_command_state_v2';
+    const STORE_KEY = 'workout_engine_data_v3';
 
-    // Default structure template
-    const defaultData = {
+    const defaultState = {
       users: ['Alex', 'Sam'],
       activeUser: 'Alex',
-      // Store workouts: array of { id, userId, date, workoutName, exercise, sets: [{weight, reps}] }
-      entries: [
-        {
-          id: '1',
-          userId: 'Alex',
-          date: '2024-01-10',
-          workoutName: 'Upper Body A',
-          exercise: 'Bench Press',
-          sets: [
-            { weight: 175, reps: 10 },
-            { weight: 185, reps: 8 },
-            { weight: 195, reps: 6 },
-            { weight: 205, reps: 5 }
-          ]
-        },
-        {
-          id: '2',
-          userId: 'Alex',
-          date: '2024-01-10',
-          workoutName: 'Upper Body A',
-          exercise: 'Overhead Press',
-          sets: [
-            { weight: 95, reps: 10 },
-            { weight: 115, reps: 8 },
-            { weight: 125, reps: 6 }
-          ]
+      // Routines mapped by "userId_date" -> { name: string, exercises: [] }
+      routines: {
+        'Alex_2026-09-14': {
+          name: 'Chest & Back',
+          exercises: ['Bench Press', 'Barbell Row', 'Incline DB Press']
         }
-      ],
-      // Quick workout templates per user
-      userWorkouts: {
-        'Alex': ['Push Day', 'Pull Day', 'Leg Day'],
-        'Sam': ['Full Body A', 'Full Body B']
-      }
+      },
+      // Completed sets
+      sets: [
+        { userId: 'Alex', date: '2026-09-10', exercise: 'Bench Press', weight: 185, reps: 8 },
+        { userId: 'Alex', date: '2026-09-10', exercise: 'Bench Press', weight: 195, reps: 6 },
+        { userId: 'Alex', date: '2026-09-10', exercise: 'Bench Press', weight: 205, reps: 5 }
+      ]
     };
 
-    function loadAppState() {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
-        return defaultData;
-      }
-      return JSON.parse(stored);
+    function getState() {
+      const data = localStorage.getItem(STORE_KEY);
+      return data ? JSON.parse(data) : defaultState;
     }
 
-    function saveAppState(state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    function saveState(state) {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
     }
 
     // Elements
     const userSelect = document.getElementById('userSelect');
-    const sessionDate = document.getElementById('sessionDate');
-    const workoutSelect = document.getElementById('workoutSelect');
-    const exerciseSelect = document.getElementById('exerciseSelect');
+    const targetDate = document.getElementById('targetDate');
+    const workoutNameInput = document.getElementById('workoutNameInput');
+    const addExerciseInput = document.getElementById('addExerciseInput');
+    const routineTags = document.getElementById('routineTags');
+    const activeExerciseSelect = document.getElementById('activeExerciseSelect');
+    const historyDateLabel = document.getElementById('historyDateLabel');
+    const historySetsContainer = document.getElementById('historySetsContainer');
     const weightInput = document.getElementById('weightInput');
     const repsInput = document.getElementById('repsInput');
-    const historyDate = document.getElementById('historyDate');
-    const historyList = document.getElementById('historyList');
-    const currentSetsTableBody = document.getElementById('currentSetsTableBody');
-    const tableHeaderTitle = document.getElementById('tableHeaderTitle');
-
-    // Return today formatted YYYY-MM-DD
-    function getTodayString() {
-      return new Date().toISOString().split('T')[0];
-    }
+    const completedSetsBody = document.getElementById('completedSetsBody');
+    const todayLogTitle = document.getElementById('todayLogTitle');
 
     function init() {
-      const state = loadAppState();
-
-      // Set today's date picker
-      sessionDate.value = getTodayString();
-
-      // Populate users
-      renderUserOptions(state);
-
-      // Populate workouts for active user
-      renderWorkoutOptions(state);
-
-      // Render sets and past reference
-      refreshDisplay();
+      const state = getState();
+      targetDate.value = new Date().toISOString().split('T')[0];
+      renderUserDropdown(state);
+      loadRoutineAndSets();
     }
 
-    function renderUserOptions(state) {
+    function renderUserDropdown(state) {
       userSelect.innerHTML = '';
-      state.users.forEach(user => {
+      state.users.forEach(u => {
         const opt = document.createElement('option');
-        opt.value = user;
-        opt.textContent = user;
-        if (user === state.activeUser) opt.selected = true;
+        opt.value = u;
+        opt.textContent = u;
+        if (u === state.activeUser) opt.selected = true;
         userSelect.appendChild(opt);
       });
     }
 
-    function renderWorkoutOptions(state) {
-      workoutSelect.innerHTML = '';
-      const list = state.userWorkouts[state.activeUser] || ['General Workout'];
-      list.forEach(w => {
-        const opt = document.createElement('option');
-        opt.value = w;
-        opt.textContent = w;
-        workoutSelect.appendChild(opt);
+    function addNewUser() {
+      const name = prompt('Enter new user profile name:');
+      if (!name || !name.trim()) return;
+      const clean = name.trim();
+      const state = getState();
+      if (!state.users.includes(clean)) state.users.push(clean);
+      state.activeUser = clean;
+      saveState(state);
+      renderUserDropdown(state);
+      loadRoutineAndSets();
+    }
+
+    function getRoutineKey() {
+      const state = getState();
+      return `${state.activeUser}_${targetDate.value}`;
+    }
+
+    function loadRoutineAndSets() {
+      const state = getState();
+      const key = getRoutineKey();
+      const routine = state.routines[key] || { name: '', exercises: [] };
+
+      // Update routine input fields
+      workoutNameInput.value = routine.name || '';
+      renderRoutineTags(routine.exercises);
+
+      // Populate current exercise selector
+      activeExerciseSelect.innerHTML = '';
+      if (routine.exercises.length === 0) {
+        const emptyOpt = document.createElement('option');
+        emptyOpt.textContent = '-- Add an exercise to the routine above --';
+        activeExerciseSelect.appendChild(emptyOpt);
+      } else {
+        routine.exercises.forEach(ex => {
+          const opt = document.createElement('option');
+          opt.value = ex;
+          opt.textContent = ex;
+          activeExerciseSelect.appendChild(opt);
+        });
+      }
+
+      renderPriorDaySets();
+      renderCurrentDaySets();
+    }
+
+    function renderRoutineTags(exercises) {
+      routineTags.innerHTML = '';
+      if (!exercises || exercises.length === 0) {
+        routineTags.innerHTML = `<span style="color:var(--text-muted); font-size:0.85rem;">No exercises chosen yet.</span>`;
+        return;
+      }
+      exercises.forEach((ex, idx) => {
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.innerHTML = `<span>${ex}</span><span class="tag-remove" onclick="removeExerciseFromRoutine(${idx})">&times;</span>`;
+        routineTags.appendChild(tag);
       });
     }
 
-    function promptNewUser() {
-      const name = prompt("Enter new user name:");
-      if (!name || !name.trim()) return;
-      const cleanName = name.trim();
-      const state = loadAppState();
+    function addExerciseToRoutine() {
+      const val = addExerciseInput.value.trim();
+      if (!val) return;
+      const state = getState();
+      const key = getRoutineKey();
 
-      if (!state.users.includes(cleanName)) {
-        state.users.push(cleanName);
-        state.userWorkouts[cleanName] = ['Full Body', 'Upper Body', 'Lower Body'];
+      if (!state.routines[key]) {
+        state.routines[key] = { name: workoutNameInput.value.trim(), exercises: [] };
       }
-      state.activeUser = cleanName;
-      saveAppState(state);
 
-      renderUserOptions(state);
-      renderWorkoutOptions(state);
-      refreshDisplay();
+      state.routines[key].name = workoutNameInput.value.trim();
+      if (!state.routines[key].exercises.includes(val)) {
+        state.routines[key].exercises.push(val);
+      }
+
+      saveState(state);
+      addExerciseInput.value = '';
+      loadRoutineAndSets();
     }
 
-    function promptNewWorkout() {
-      const name = prompt("Enter workout name (e.g. Leg Day, Chest & Tri):");
-      if (!name || !name.trim()) return;
-      const cleanName = name.trim();
-      const state = loadAppState();
-
-      if (!state.userWorkouts[state.activeUser]) {
-        state.userWorkouts[state.activeUser] = [];
+    function removeExerciseFromRoutine(index) {
+      const state = getState();
+      const key = getRoutineKey();
+      if (state.routines[key]) {
+        state.routines[key].exercises.splice(index, 1);
+        saveState(state);
+        loadRoutineAndSets();
       }
-
-      if (!state.userWorkouts[state.activeUser].includes(cleanName)) {
-        state.userWorkouts[state.activeUser].push(cleanName);
-        saveAppState(state);
-      }
-
-      renderWorkoutOptions(state);
-      workoutSelect.value = cleanName;
-      refreshDisplay();
     }
 
-    // Lookup previous day's last 3 sets (STRICTLY before the selected date)
-    function renderPriorDayHistory() {
-      const state = loadAppState();
+    workoutNameInput.addEventListener('change', () => {
+      const state = getState();
+      const key = getRoutineKey();
+      if (!state.routines[key]) {
+        state.routines[key] = { name: '', exercises: [] };
+      }
+      state.routines[key].name = workoutNameInput.value.trim();
+      saveState(state);
+    });
+
+    // Renders the last 3 sets from a date strictly BEFORE targetDate.value
+    function renderPriorDaySets() {
+      const state = getState();
       const user = state.activeUser;
-      const currentDate = sessionDate.value;
-      const exercise = exerciseSelect.value;
+      const curDate = targetDate.value;
+      const selectedEx = activeExerciseSelect.value;
 
-      // Find sessions for this user & exercise where date < selected date
-      const pastSessions = state.entries
-        .filter(e => e.userId === user && e.exercise === exercise && e.date < currentDate && e.sets && e.sets.length > 0)
-        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest past day first
+      historySetsContainer.innerHTML = '';
 
-      historyList.innerHTML = '';
-
-      if (pastSessions.length === 0) {
-        historyDate.textContent = 'None';
-        historyList.innerHTML = '<span class="no-history">No past session records found.</span>';
+      if (!selectedEx || selectedEx.startsWith('--')) {
+        historyDateLabel.textContent = '-';
+        historySetsContainer.innerHTML = `<span style="color:var(--text-muted); font-size:0.85rem;">No exercise selected.</span>`;
         return;
       }
 
-      const mostRecentSession = pastSessions[0];
-      historyDate.textContent = `${mostRecentSession.date} (${mostRecentSession.workoutName || 'Workout'})`;
+      // Filter sets belonging to this user & exercise, older than curDate
+      const pastSets = state.sets.filter(s => s.userId === user && s.exercise === selectedEx && s.date < curDate);
 
-      // Grab the last 3 sets from that session
-      const lastThreeSets = mostRecentSession.sets.slice(-3);
-      const startSetIdx = mostRecentSession.sets.length - lastThreeSets.length;
+      if (pastSets.length === 0) {
+        historyDateLabel.textContent = 'None';
+        historySetsContainer.innerHTML = `<span style="color:var(--text-muted); font-size:0.85rem;">No previous sessions found.</span>`;
+        return;
+      }
 
-      lastThreeSets.forEach((set, idx) => {
+      // Find the most recent previous workout date
+      const dates = [...new Set(pastSets.map(s => s.date))].sort().reverse();
+      const lastSessionDate = dates[0];
+      historyDateLabel.textContent = lastSessionDate;
+
+      // Extract the sets from that single previous day, then take up to the last 3
+      const lastSessionSets = pastSets.filter(s => s.date === lastSessionDate);
+      const last3 = lastSessionSets.slice(-3);
+
+      last3.forEach((set, i) => {
         const pill = document.createElement('div');
         pill.className = 'history-pill';
-        pill.innerHTML = `
-          <span class="set-tag">Set ${startSetIdx + idx + 1}:</span>
-          <strong>${set.weight}</strong> × <strong>${set.reps}</strong>
-        `;
-        historyList.appendChild(pill);
+        pill.innerHTML = `<span style="color:var(--text-muted);">Set ${lastSessionSets.length - last3.length + i + 1}:</span> <strong>${set.weight}</strong> × <strong>${set.reps}</strong>`;
+        historySetsContainer.appendChild(pill);
       });
     }
 
-    // Render sets performed on the currently selected workout day
+    // Save active set (does NOT clear inputs so you can see your data)
+    function saveActiveSet() {
+      const weight = parseFloat(weightInput.value);
+      const reps = parseInt(repsInput.value, 10);
+      const exercise = activeExerciseSelect.value;
+
+      if (isNaN(weight) || isNaN(reps) || !exercise || exercise.startsWith('--')) return;
+
+      const state = getState();
+      state.sets.push({
+        userId: state.activeUser,
+        date: targetDate.value,
+        exercise: exercise,
+        weight: weight,
+        reps: reps
+      });
+
+      saveState(state);
+      renderCurrentDaySets();
+      // Notice: weightInput.value and repsInput.value remain untouched
+    }
+
     function renderCurrentDaySets() {
-      const state = loadAppState();
+      const state = getState();
       const user = state.activeUser;
-      const date = sessionDate.value;
-      const workoutName = workoutSelect.value;
-      const exercise = exerciseSelect.value;
+      const curDate = targetDate.value;
 
-      tableHeaderTitle.textContent = `Sets on ${date} (${exercise})`;
+      todayLogTitle.textContent = `Completed Sets: ${curDate}`;
+      completedSetsBody.innerHTML = '';
 
-      const entry = state.entries.find(e => 
-        e.userId === user && 
-        e.date === date && 
-        e.workoutName === workoutName && 
-        e.exercise === exercise
-      );
+      const daySets = state.sets.filter(s => s.userId === user && s.date === curDate);
 
-      currentSetsTableBody.innerHTML = '';
-
-      if (!entry || !entry.sets || entry.sets.length === 0) {
-        currentSetsTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No sets logged yet for this session.</td></tr>`;
+      if (daySets.length === 0) {
+        completedSetsBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No sets logged for this date.</td></tr>`;
         return;
       }
 
-      entry.sets.forEach((set, index) => {
+      daySets.forEach((set, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>Set ${index + 1}</td>
+          <td>${idx + 1}</td>
+          <td>${set.exercise}</td>
           <td>${set.weight}</td>
           <td>${set.reps}</td>
           <td style="text-align: right;">
-            <button class="btn-delete" onclick="deleteSet(${index})">Remove</button>
+            <button class="btn-delete" onclick="deleteSetByIndex(${idx})">Delete</button>
           </td>
         `;
-        currentSetsTableBody.appendChild(tr);
+        completedSetsBody.appendChild(tr);
       });
     }
 
-    // Save set & keep inputs populated
-    function saveSet() {
-      const weight = parseFloat(weightInput.value);
-      const reps = parseInt(repsInput.value, 10);
-      if (isNaN(weight) || isNaN(reps)) return;
-
-      const state = loadAppState();
+    function deleteSetByIndex(dayIndex) {
+      const state = getState();
       const user = state.activeUser;
-      const date = sessionDate.value;
-      const workoutName = workoutSelect.value;
-      const exercise = exerciseSelect.value;
+      const curDate = targetDate.value;
 
-      let entry = state.entries.find(e => 
-        e.userId === user && 
-        e.date === date && 
-        e.workoutName === workoutName && 
-        e.exercise === exercise
-      );
+      let matchCount = 0;
+      const globalIndex = state.sets.findIndex(s => {
+        if (s.userId === user && s.date === curDate) {
+          if (matchCount === dayIndex) return true;
+          matchCount++;
+        }
+        return false;
+      });
 
-      if (!entry) {
-        entry = {
-          id: Date.now().toString(),
-          userId: user,
-          date: date,
-          workoutName: workoutName,
-          exercise: exercise,
-          sets: []
-        };
-        state.entries.push(entry);
-      }
-
-      entry.sets.push({ weight, reps });
-      saveAppState(state);
-
-      // Re-render the sets table
-      renderCurrentDaySets();
-
-      // Note: We intentionally do NOT clear weightInput and repsInput so your values remain in the UI
-    }
-
-    function deleteSet(index) {
-      const state = loadAppState();
-      const user = state.activeUser;
-      const date = sessionDate.value;
-      const workoutName = workoutSelect.value;
-      const exercise = exerciseSelect.value;
-
-      const entry = state.entries.find(e => 
-        e.userId === user && 
-        e.date === date && 
-        e.workoutName === workoutName && 
-        e.exercise === exercise
-      );
-
-      if (entry && entry.sets) {
-        entry.sets.splice(index, 1);
-        saveAppState(state);
+      if (globalIndex > -1) {
+        state.sets.splice(globalIndex, 1);
+        saveState(state);
         renderCurrentDaySets();
       }
     }
 
-    function refreshDisplay() {
-      renderPriorDayHistory();
-      renderCurrentDaySets();
-    }
-
-    // Event listeners
+    // Event hooks
     userSelect.addEventListener('change', () => {
-      const state = loadAppState();
+      const state = getState();
       state.activeUser = userSelect.value;
-      saveAppState(state);
-      renderWorkoutOptions(state);
-      refreshDisplay();
+      saveState(state);
+      loadRoutineAndSets();
     });
 
-    workoutSelect.addEventListener('change', refreshDisplay);
-    exerciseSelect.addEventListener('change', refreshDisplay);
-    sessionDate.addEventListener('change', refreshDisplay);
+    targetDate.addEventListener('change', loadRoutineAndSets);
+    activeExerciseSelect.addEventListener('change', renderPriorDaySets);
 
-    // Run setup
     init();
   </script>
 </body>
